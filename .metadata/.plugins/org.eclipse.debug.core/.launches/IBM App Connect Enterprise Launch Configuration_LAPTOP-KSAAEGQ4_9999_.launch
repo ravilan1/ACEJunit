@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?><launchConfiguration type="com.ibm.etools.mft.debug.internal.mbLaunchConfigurationDelegate">
+<stringAttribute key="BRName" value="Node_CC_Bkr"/>
+<stringAttribute key="ConnectionInfo" value=""/>
+<stringAttribute key="EGName" value="Test"/>
+<stringAttribute key="com.ibm.debug.wsa.attr_vm_name" value="IBM J9 VM"/>
+<stringAttribute key="com.ibm.debug.wsa.attr_vm_version" value="1.8.0_301"/>
+<intAttribute key="com.ibm.debug.wsa.attr_was_version" value="61"/>
+<stringAttribute key="com.ibm.etools.mft.debug.attr_hostname" value="LAPTOP-KSAAEGQ4"/>
+<stringAttribute key="com.ibm.etools.mft.debug.attr_javaportname" value="9999"/>
+<stringAttribute key="org.eclipse.debug.core.source_locator_id" value="com.ibm.etools.mft.debug.sourcelookup.MBSourceLookupDirector"/>
+<stringAttribute key="org.eclipse.debug.core.source_locator_memento" value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;sourceLookupDirector&gt;&#13;&#10;&lt;sourceContainers duplicates=&quot;true&quot;&gt;&#13;&#10;&lt;container memento=&quot;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot;?&amp;gt;&amp;lt;flowProject name=&amp;quot;FileProcessing&amp;quot;/&amp;gt;&quot; typeId=&quot;com.ibm.etools.mft.debug.containerType.flowProject&quot;/&gt;&#13;&#10;&lt;container memento=&quot;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot;?&amp;gt;&amp;lt;flowProject name=&amp;quot;Milliman&amp;quot;/&amp;gt;&quot; typeId=&quot;com.ibm.etools.mft.debug.containerType.flowProject&quot;/&gt;&#13;&#10;&lt;container memento=&quot;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot;?&amp;gt;&amp;lt;flowProject name=&amp;quot;JsonSchemaValidation&amp;quot;/&amp;gt;&quot; typeId=&quot;com.ibm.etools.mft.debug.containerType.flowProject&quot;/&gt;&#13;&#10;&lt;container memento=&quot;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot;?&amp;gt;&amp;lt;flowProject name=&amp;quot;CustomerManagement&amp;quot;/&amp;gt;&quot; typeId=&quot;com.ibm.etools.mft.debug.containerType.flowProject&quot;/&gt;&#13;&#10;&lt;/sourceContainers&gt;&#13;&#10;&lt;/sourceLookupDirector&gt;"/>
+</launchConfiguration>

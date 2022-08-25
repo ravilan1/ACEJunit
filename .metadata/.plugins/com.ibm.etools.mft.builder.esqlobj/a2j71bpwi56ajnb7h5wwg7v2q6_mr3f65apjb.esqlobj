@@ -1,0 +1,228 @@
+/*EATE FUNCTION Main() RETURNS BOOLE*/
+	BEGIN
+		-- Declaring Variables
+		DECLARE blbCData BLOB;
+		DECLARE tem NAMESPACE 'http://tempuri.org/'; -- Change based on new ESB WSDL
+		DECLARE soapenv NAMESPACE 'http://schemas.xmlsoap.org/soap/envelope/';
+		DECLARE chrCData CHARACTER '';
+		DECLARE intCntr INTEGER 1;
+		
+		CREATE FIELD Environment.Variables;
+		DECLARE refEnv REFERENCE TO Environment.Variables;
+		/*	If the Auth Token is Expired, create a Retry flag and set to to true so that call goes back to previous step 
+		and calls PAS Authentication subflow again	*/
+		IF( (InputRoot.HTTPResponseHeader."X-Original-HTTP-Status-Code" = '401') AND NOT EXISTS(refEnv.RetryFlag[] )) THEN
+			SET refEnv.RetryFlag = TRUE;
+			PROPAGATE TO TERMINAL 'out1';
+			RETURN FALSE;
+		--Throw user exception if authentication expired error response received for the second time
+		ELSEIF(InputRoot.HTTPResponseHeader."X-Original-HTTP-Status-Code" = '401') THEN
+			THROW USER EXCEPTION MESSAGE 400 VALUES('Error', 'Token Expired') ;
+		END IF;
+		--if the HTTPResponseHeader field contains success code proceed else throw exception
+		IF (InputRoot.HTTPResponseHeader."X-Original-HTTP-Status-Code" = '200' ) THEN
+			-- Context declaration to override default namespace
+			SET OutputRoot.SOAP.Context.Namespace.(SOAP.NamespaceDecl)xmlns:soapenv = soapenv;
+			SET OutputRoot.SOAP.Context.Namespace.(SOAP.NamespaceDecl)xmlns:tem 	= tem;
+			-- Create output response in environment tree and convert to cData to send in SOAP response
+			CREATE LASTCHILD OF Environment.Variables DOMAIN 'XMLNSC' NAME 'OutputResponse' ;
+			CREATE FIELD Environment.Variables.OutputResponse.IntelRX.IntelRXResponse;
+			DECLARE refEnvOut REFERENCE TO Environment.Variables.OutputResponse.IntelRX.IntelRXResponse;
+			DECLARE refIn REFERENCE TO InputRoot.JSON.Data;
+			-- Errors are sent in 200 response also
+			IF EXISTS(refIn.errors[]) THEN
+				SET refEnvOut.TrackingID = InputLocalEnvironment.Destination.SOAP.Reply.ReplyIdentifier;
+				SET refEnvOut.Result = '0';
+				SET refEnvOut.Comments = refIn.errors.Item[>].providerDescription;
+			ELSE
+				DECLARE refOdrIn REFERENCE TO refIn.orderResults;
+				SET refEnvOut.TrackingID = refIn.medicalHistoryOrderID;
+				SET refEnvOut.Result = '1';--CAST(refOdrIn.resultCode AS INTEGER); as per mapping sheet
+				SET refEnvOut.MinimumResponsePollingTime = CAST(refIn.intervalPollingTimeinSeconds AS INTEGER);
+				SET refEnvOut.RequestType = refIn.inquiryTypeDataCode;
+
+				CREATE FIELD refEnvOut.Order[>];
+				DECLARE refOdrOut REFERENCE TO refEnvOut.Order[>];
+
+				SET refOdrOut.OrderReference 	= refIn.associatedReferenceID;
+				SET refOdrOut.OrderResultStatus = refOdrIn.resultCode;
+				SET refOdrOut.OrderResultsURL 	= refOdrIn.resultURLID;
+
+				CREATE FIELD refOdrOut.OrderResultsSummary;
+				DECLARE refSumOut REFERENCE TO refOdrOut.OrderResultsSummary;
+
+				SET refSumOut.EligibilityCount = CAST(refOdrIn.medicalSearchLocationCount AS INTEGER);
+				SET refSumOut.RxCount = CAST(refOdrIn.totalPrescriptionCount AS INTEGER);
+				SET refSumOut.MaxPriority = refOdrIn.maximumPrescriptionRatingCode;
+				DECLARE refRateIn REFERENCE TO refOdrIn.ratingPrescriptions.Item[>intCntr];
+				-- Set Applicant Risk Score Value
+				WHILE LASTMOVE(refRateIn) DO
+					IF refRateIn.prescriptionRatingCode = 'HIGH' THEN
+						SET refSumOut.HighRxCount = CAST(refRateIn.ratingPrescriptionCount AS INTEGER);
+					ELSEIF refRateIn.prescriptionRatingCode = 'MEDIUM' THEN
+						SET refSumOut.MediumRxCount = CAST(refRateIn.ratingPrescriptionCount AS INTEGER);
+					ELSEIF refRateIn.prescriptionRatingCode = 'LOW' THEN
+						SET refSumOut.LowRxCount = CAST(refRateIn.ratingPrescriptionCount AS INTEGER);
+					END IF;
+					SET intCntr = intCntr + 1;
+					MOVE refRateIn TO refOdrIn.ratingPrescriptions.Item[>intCntr];
+				END WHILE;		
+
+				DECLARE refPerIn REFERENCE TO refIn.person;
+				CREATE FIELD refOdrOut.Application[>].Applicant;
+				DECLARE refApplOut REFERENCE TO refOdrOut.Application[>].Applicant;
+				SET refApplOut.SSN 			= refPerIn.governmentIDs.Item[>].governmentID;
+				SET refApplOut.FirstName 	= refPerIn.name.personGiven1Name;
+				SET refApplOut.LastName 	= refPerIn.name.personLastName;
+				SET refApplOut.Gender 		= refPerIn.genderCode;
+				SET refApplOut.DOB 			= CAST(refPerIn.birthDate AS DATE FORMAT 'yyyy-MM-dd');
+				SET intCntr = 1;
+				DECLARE refAddrIn REFERENCE TO refPerIn.addresses.Item[>intCntr];
+				-- Set address data
+				WHILE LASTMOVE(refAddrIn) DO
+					IF intCntr = 1 THEN
+						SET refApplOut.State 	= refAddrIn.extension.stateCode;
+						SET refApplOut.ZipCode 	= refAddrIn.extension.zipDeliveryOfficeCode;
+					ELSEIF intCntr = 2 THEN
+						SET refApplOut.ZipCode2 = refAddrIn.extension.zipDeliveryOfficeCode;
+					ELSEIF intCntr = 3 THEN
+						SET refApplOut.ZipCode3 = refAddrIn.extension.zipDeliveryOfficeCode;
+					ELSEIF intCntr = 4 THEN
+						SET refApplOut.ZipCode4 = refAddrIn.extension.zipDeliveryOfficeCode;
+					END IF;
+					SET intCntr = intCntr + 1;
+					MOVE refAddrIn TO refPerIn.addresses.Item[>intCntr];
+				END WHILE;
+				SET refApplOut.Relationship = CAST(refPerIn.relationshipCode AS INTEGER);
+				SET refApplOut.MiddleName 	= refPerIn.name.personGiven2Name;
+				SET refApplOut.PrimarySSN 	= refPerIn.governmentIDs.Item[>].governmentID;
+
+				SET intCntr = 1;
+				DECLARE refExtnIn REFERENCE TO refPerIn.extension.additionalAttributes.Item[>intCntr];
+				CREATE FIELD refApplOut.AdditionalAttributes;
+				DECLARE refAddlnOut REFERENCE TO refApplOut.AdditionalAttributes;
+				-- All additional paramets are set as Name Value pair
+				WHILE LASTMOVE(refExtnIn) DO
+					SET refAddlnOut.Attribute[>intCntr].Name 	= refExtnIn.dataRequirementName;
+					SET refAddlnOut.Attribute[>intCntr].Value 	= refExtnIn.dataRequirementValue;
+					SET intCntr = intCntr + 1;
+					MOVE refExtnIn TO refPerIn.extension.additionalAttributes.Item[>intCntr];
+				END WHILE;
+				SET refApplOut.ApplicantResultStatus = refOdrIn.resultCode;
+				DECLARE refRuleIn REFERENCE TO refIn.riskRules;
+				SET refApplOut.RulesHitCount = CAST(refRuleIn.medicalRiskRuleCount AS INTEGER);
+
+				CREATE FIELD refApplOut.RiskRulesClassResults;
+				DECLARE refRClassOut REFERENCE TO refApplOut.RiskRulesClassResults;
+				DECLARE refClassIn REFERENCE TO refRuleIn.classresults.Item[>];
+				SET intCntr = 1;
+				-- RiskRules attributes
+				WHILE LASTMOVE(refClassIn) DO
+					SET refRClassOut.ClassResult[>intCntr].Index 		= CAST(refClassIn.medicalRiskRuleClassCode AS INTEGER);
+					SET refRClassOut.ClassResult[>intCntr].Level 		= CAST(refClassIn.medicalStatusCode AS INTEGER);
+					SET refRClassOut.ClassResult[>intCntr].Identifier 	= refClassIn.medicalRiskRuleClassDescription;
+					SET intCntr = intCntr + 1;
+					MOVE refClassIn TO refRuleIn.classresults.Item[>intCntr];
+				END WHILE;
+
+				CREATE FIELD refApplOut.RiskRules;
+				DECLARE refRiskOut REFERENCE TO refApplOut.RiskRules;
+				DECLARE refRHitIn REFERENCE TO refRuleIn.rulesHits.Item[>];
+				SET intCntr = 1;
+				-- MIB response code is set in RuleSuffix6 as per the mail communication from Jeff
+				WHILE LASTMOVE(refRHitIn) DO
+					SET refRiskOut.RuleHit[>intCntr].RuleGroupIdent 	= refRHitIn.ruleGroupID;
+					SET refRiskOut.RuleHit[>intCntr].RuleSubGroupIdent 	= refRHitIn.ruleSubGroupID;
+					SET refRiskOut.RuleHit[>intCntr].RuleIdent 			= refRHitIn.riskRuleID;
+					SET refRiskOut.RuleHit[>intCntr].RuleModifier 		= refRHitIn.ruleModifierCode;
+					SET refRiskOut.RuleHit[>intCntr].RuleName 			= refRHitIn.riskRuleName;
+					SET refRiskOut.RuleHit[>intCntr].RuleMessage 		= refRHitIn.ruleRuleDescription;
+					SET refRiskOut.RuleHit[>intCntr].RuleSuffix6 		= refRHitIn.statusCode;
+					DECLARE intTmpCntr INTEGER 1;
+					DECLARE refClassTmp REFERENCE TO refRHitIn.classresults.Item[>];
+					WHILE LASTMOVE(refClassTmp) DO
+						SET refRiskOut.RuleHit[>intCntr].RiskRulesClassResults.ClassResult[>intTmpCntr].Index 		
+						= CAST(refClassTmp.medicalRiskRuleClassCode AS INTEGER);
+						SET refRiskOut.RuleHit[>intCntr].RiskRulesClassResults.ClassResult[>intTmpCntr].Level 		
+						= CAST(refClassTmp.medicalStatusCode AS INTEGER);
+						SET refRiskOut.RuleHit[>intCntr].RiskRulesClassResults.ClassResult[>intTmpCntr].Identifier	
+						= refClassTmp.medicalRiskRuleClassDescription;
+						SET intTmpCntr = intTmpCntr + 1;
+						MOVE refClassTmp TO refRHitIn.classresults.Item[>intTmpCntr];
+					END WHILE;
+					SET intCntr = intCntr + 1;
+					MOVE refRHitIn TO refRuleIn.rulesHits.Item[>intCntr];
+				END WHILE;
+				SET refApplOut.RxScore		=	refOdrIn.drugRiskScoreValue ;
+				CREATE FIELD refApplOut.MIB;
+				SET refApplOut.MIB.Response = refIn.MIB.responseBLOB;
+				SET intCntr = 1;
+				DECLARE refMIBIn REFERENCE TO refIn.MIB.resultCodes.Item[>];
+				WHILE LASTMOVE(refMIBIn) DO
+					SET refApplOut.MIB.ReturnCodes.MIBCode[>intCntr] = refMIBIn.resultCode;
+					SET intCntr = intCntr + 1;
+					MOVE refMIBIn TO refIn.MIB.resultCodes.Item[>intCntr];
+				END WHILE;
+
+				CREATE FIELD refApplOut.MVR;
+				SET refApplOut.MVR.Response = refIn.MVR.responseBLOB;
+
+				CREATE FIELD refApplOut.Prescription;
+				SET refApplOut.Prescription.TotalFills 			  = CAST(refIn.rx.prescription.prescriptionFillCount AS INTEGER);
+				SET refApplOut.Prescription.FillListingIsComplete = CAST(refIn.rx.prescription.fillListingCompleteIndicator AS INTEGER); 
+				
+				IF CARDINALITY(refIn.rx.prescription.drugFills[]) > 0 THEN
+					CREATE FIELD refApplOut.Prescription.Fills;
+					DECLARE refFillOut REFERENCE TO refApplOut.Prescription.Fills;
+					DECLARE refRXIn REFERENCE TO refIn.rx.prescription.drugFills.Item[>];
+					SET intCntr = 1;
+					-- All the applicant medical prescriptions are set
+					WHILE LASTMOVE(refRXIn) DO
+						SET refFillOut.DrugFill[>intCntr].DrugFillID 				= CAST(refRXIn.prescriptionID AS INTEGER);
+						SET refFillOut.DrugFill[>intCntr].FillDate 					= CAST(refRXIn.fillDate AS DATE FORMAT 'yyyy-MM-dd');
+						SET refFillOut.DrugFill[>intCntr].NDC 						= refRXIn.drugCode;
+						SET refFillOut.DrugFill[>intCntr].DrugBrandName 			= refRXIn.drugBrandName;
+						SET refFillOut.DrugFill[>intCntr].DrugGenericName 			= refRXIn.drugGenericName;
+						SET refFillOut.DrugFill[>intCntr].DrugGenericNameAndDosage 	= refRXIn.dosageMeasureDescription;
+						SET refFillOut.DrugFill[>intCntr].Quantity 					= CAST(refRXIn.drugQuantityCount AS INTEGER);
+						SET refFillOut.DrugFill[>intCntr].DaysSupply 				= CAST(refRXIn.drugSupplyPeriodinDays AS INTEGER);
+						SET refFillOut.DrugFill[>intCntr].DrugPriority 				= refRXIn.drugPriorityCode;
+						SET refFillOut.DrugFill[>intCntr].PhysicianName 			= refRXIn.party.name.personFullName;
+						SET refFillOut.DrugFill[>intCntr].PhysicianSpecialty 		= refRXIn.party.specialtyName;
+						SET refFillOut.DrugFill[>intCntr].PhysicianAddress1 		= refRXIn.party.addresses.Item[>].address1Line;
+						SET refFillOut.DrugFill[>intCntr].PhysicianAddress2 		= refRXIn.party.addresses.Item[>].address2Line;
+						SET refFillOut.DrugFill[>intCntr].PhysicianAddress3 		= refRXIn.party.addresses.Item[>].address3Line;
+						SET refFillOut.DrugFill[>intCntr].PhysicianAddress4 		= refRXIn.party.addresses.Item[>].address4Line;
+						SET refFillOut.DrugFill[>intCntr].PhysicianPhone 			= refRXIn.party.phones.Item[>].extension.areaCode 
+																					  || refRXIn.party.phones.Item[>].extension.phoneNumber;
+						SET refFillOut.DrugFill[>intCntr].PharmacyId 				= refRXIn.party.partyID;
+						DECLARE refDiagIn REFERENCE TO refRXIn.procedureDiagnosis.Item[>];
+						DECLARE intTmpCntr INTEGER 1;
+						WHILE LASTMOVE(refDiagIn) DO
+							SET refFillOut.DrugFill[>intCntr].Indications.Item[>intTmpCntr].ConditionName 	= 
+							refDiagIn.procedureDiagnosisDescription;
+							SET refFillOut.DrugFill[>intCntr].Indications.Item[>intTmpCntr].ICDCode 		= 
+							refDiagIn.procedureDiagnosisCode;
+							SET intTmpCntr = intTmpCntr + 1;
+							MOVE refDiagIn TO refRXIn.procedureDiagnosis.Item[>intTmpCntr];
+						END WHILE;
+						SET intCntr = intCntr + 1;
+						MOVE refRXIn TO refIn.rx.prescription.drugFills.Item[>intCntr];
+					END WHILE;
+				END IF;
+			END IF;
+			-- Prepare output response
+			SET blbCData = ASBITSTREAM(refEnv.OutputResponse,InputRoot.Properties.Encoding,InputRoot.Properties.CodedCharSetId );
+			SET chrCData = CAST(blbCData AS CHAR CCSID InputRoot.Properties.CodedCharSetId);
+			DECLARE refOut REFERENCE TO OutputRoot.SOAP.Body;
+			CREATE LASTCHILD OF OutputRoot.SOAP.Body AS refOut NAMESPACE tem NAME 'RetrieveResponseResponse';
+			SET refOut.(XMLNSC.CDataField)tem:RetrieveResponseResult = chrCData;
+		ELSE
+			-- Indicator for RMT/BackendError error
+			SET refEnv.isRMTError = TRUE;
+			THROW USER EXCEPTION MESSAGE InputRoot.HTTPResponseHeader."X-Original-HTTP-Status-Code" 
+			VALUES(COALESCE(InputRoot.JSON.Data.errors.Item[>].errorDescription, 
+			InputRoot.HTTPResponseHeader."X-Original-HTTP-Status-Line"));
+		END IF;
+		RETURN TRUE;
+	END;

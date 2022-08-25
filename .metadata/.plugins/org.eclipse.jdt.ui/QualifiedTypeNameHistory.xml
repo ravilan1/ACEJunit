@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?><qualifiedTypeNameHistroy>
+<fullyQualifiedTypeName name="java.io.InputStream"/>
+<fullyQualifiedTypeName name="java.lang.Thread"/>
+<fullyQualifiedTypeName name="com.ibm.integration.test.v1.SpyObjectReference"/>
+<fullyQualifiedTypeName name="com.ibm.integration.test.v1.TestMessageAssembly"/>
+<fullyQualifiedTypeName name="java.lang.Exception"/>
+<fullyQualifiedTypeName name="com.ibm.xml.xlxp.api.stax.XMLInputFactoryImpl.Properties"/>
+<fullyQualifiedTypeName name="com.ibm.bean.TestCaseBean"/>
+<fullyQualifiedTypeName name="java.io.FileReader"/>
+<fullyQualifiedTypeName name="java.io.BufferedReader"/>
+<fullyQualifiedTypeName name="java.io.InputStreamReader"/>
+<fullyQualifiedTypeName name="com.ibm.util.CommonUtil"/>
+<fullyQualifiedTypeName name="java.util.Properties"/>
+<fullyQualifiedTypeName name="com.ibm.integration.test.v1.NodeSpy"/>
+<fullyQualifiedTypeName name="com.ibm.integration.test.v1.exception.TestException"/>
+<fullyQualifiedTypeName name="com.ibm.integration.test.v1.NodeStub"/>
+</qualifiedTypeNameHistroy>

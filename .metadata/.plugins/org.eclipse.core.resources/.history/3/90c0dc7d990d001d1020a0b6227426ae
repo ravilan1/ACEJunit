@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?><MessageAssembly iib:parser="GENERICROOT" xmlns:iib="http://com.ibm.iib/lt/1.0">
+   <version xmlns:iib="http://com.ibm.iib/lt/1.0" iib:valueType="INTEGER">1</version>
+   <checkpoint>
+      <messageId xmlns:iib="http://com.ibm.iib/lt/1.0" iib:valueType="CHARACTER">000076C8-62E11761-00000001</messageId>
+      <propagationCount xmlns:iib="http://com.ibm.iib/lt/1.0" iib:valueType="INTEGER">0</propagationCount>
+      <nodeCallDepth xmlns:iib="http://com.ibm.iib/lt/1.0" iib:valueType="INTEGER">1</nodeCallDepth>
+      <timestamp xmlns:iib="http://com.ibm.iib/lt/1.0" iib:valueType="TIMESTAMP">2022-07-27 10:45:53.632</timestamp>
+      <source>
+         <name xmlns:iib="http://com.ibm.iib/lt/1.0" iib:valueType="CHARACTER">Milliman Input</name>
+         <identifier xmlns:iib="http://com.ibm.iib/lt/1.0" iib:valueType="CHARACTER">com.metlife.esb.Milliman_RiskAssessment_MF#FCMComposite_1_1</identifier>
+         <type xmlns:iib="http://com.ibm.iib/lt/1.0" iib:valueType="CHARACTER">ComIbmSOAPInputNode</type>
+         <terminal xmlns:iib="http://com.ibm.iib/lt/1.0" iib:valueType="CHARACTER">out</terminal>
+         <nodePath>
+            <application xmlns:iib="http://com.ibm.iib/lt/1.0" iib:valueType="CHARACTER">Milliman_RiskAssessment_APP</application>
+            <messageFlow xmlns:iib="http://com.ibm.iib/lt/1.0" iib:valueType="CHARACTER">com.metlife.esb.Milliman_RiskAssessment_MF</messageFlow>
+            <node xmlns:iib="http://com.ibm.iib/lt/1.0" iib:valueType="CHARACTER">Milliman Input</node>
+         </nodePath>
+         <inputNode xmlns:iib="http://com.ibm.iib/lt/1.0" iib:valueType="BOOLEAN">TRUE</inputNode>
+      </source>
+      <target>
+         <name xmlns:iib="http://com.ibm.iib/lt/1.0" iib:valueType="CHARACTER">SOAP Extract</name>
+         <identifier xmlns:iib="http://com.ibm.iib/lt/1.0" iib:valueType="CHARACTER">com.metlife.esb.Milliman_RiskAssessment_MF#FCMComposite_1_2</identifier>
+         <type xmlns:iib="http://com.ibm.iib/lt/1.0" iib:valueType="CHARACTER">ComIbmSOAPExtractNode</type>
+         <terminal xmlns:iib="http://com.ibm.iib/lt/1.0" iib:valueType="CHARACTER">in</terminal>
+         <nodePath>
+            <application xmlns:iib="http://com.ibm.iib/lt/1.0" iib:valueType="CHARACTER">Milliman_RiskAssessment_APP</application>
+            <messageFlow xmlns:iib="http://com.ibm.iib/lt/1.0" iib:valueType="CHARACTER">com.metlife.esb.Milliman_RiskAssessment_MF</messageFlow>
+            <node xmlns:iib="http://com.ibm.iib/lt/1.0" iib:valueType="CHARACTER">SOAP Extract</node>
+         </nodePath>
+      </target>
+   </checkpoint>
+   <environment xmlns:iib="http://com.ibm.iib/lt/1.0" iib:parser="MQROOT">
+      <Monitoring>
+         <EventCorrelation>
+            <localTransactionId iib:valueType="CHARACTER">534f415000000000000000006155433fc876000000000000</localTransactionId>
+            <parentTransactionId iib:elementType="0x03000000" iib:valueType="CHARACTER"/>
+            <globalTransactionId iib:elementType="0x03000000" iib:valueType="CHARACTER"/>
+         </EventCorrelation>
+      </Monitoring>
+   </environment>
+   <localEnvironment xmlns:iib="http://com.ibm.iib/lt/1.0" iib:parser="MQROOT">
+      <Destination>
+         <SOAP>
+            <Reply>
+               <ReplyIdentifier iib:valueType="BLOB">534f415000000000000000006155433fc876000000000000</ReplyIdentifier>
+            </Reply>
+         </SOAP>
+         <RouterList>
+            <DestinationData>
+               <labelName iib:valueType="CHARACTER">SubmitRequest</labelName>
+            </DestinationData>
+         </RouterList>
+      </Destination>
+      <SOAP>
+         <Input>
+            <Transport>
+               <HTTP>
+                  <MaxClientWaitTime iib:valueType="INTEGER">20</MaxClientWaitTime>
+               </HTTP>
+            </Transport>
+         </Input>
+      </SOAP>
+   </localEnvironment>
+   <exceptionList/>
+   <message xmlns:iib="http://com.ibm.iib/lt/1.0" iib:parser="SOAPRoot">
+      <Properties iib:parser="SOAPPROPERTYPARSER">
+         <MessageSet iib:elementType="0x03000000" iib:valueType="CHARACTER"/>
+         <MessageType iib:elementType="0x03000000" iib:valueType="CHARACTER"/>
+         <MessageFormat iib:elementType="0x03000000" iib:valueType="CHARACTER"/>
+         <Encoding iib:valueType="INTEGER">546</Encoding>
+         <CodedCharSetId iib:valueType="INTEGER">1208</CodedCharSetId>
+         <Transactional iib:valueType="BOOLEAN">FALSE</Transactional>
+         <Persistence iib:valueType="BOOLEAN">FALSE</Persistence>
+         <CreationTime iib:valueType="GMTTIMESTAMP">2022-07-27 10:45:53.632</CreationTime>
+         <ExpirationTime iib:valueType="INTEGER">-1</ExpirationTime>
+         <Priority iib:valueType="INTEGER">0</Priority>
+         <ReplyIdentifier iib:valueType="BLOB">000000000000000000000000000000000000000000000000</ReplyIdentifier>
+         <ReplyProtocol iib:valueType="CHARACTER">SOAP-AXIS2</ReplyProtocol>
+         <Topic iib:elementType="0x03000000"/>
+         <ContentType iib:valueType="CHARACTER">application/soap+xml;charset=UTF-8;action="http://tempuri.org/SubmitRequest"</ContentType>
+         <IdentitySourceType iib:elementType="0x03000000" iib:valueType="CHARACTER"/>
+         <IdentitySourceToken iib:elementType="0x03000000" iib:valueType="CHARACTER"/>
+         <IdentitySourcePassword iib:elementType="0x03000000" iib:valueType="CHARACTER"/>
+         <IdentitySourceIssuedBy iib:elementType="0x03000000" iib:valueType="CHARACTER"/>
+         <IdentityMappedType iib:elementType="0x03000000" iib:valueType="CHARACTER"/>
+         <IdentityMappedToken iib:elementType="0x03000000" iib:valueType="CHARACTER"/>
+         <IdentityMappedPassword iib:elementType="0x03000000" iib:valueType="CHARACTER"/>
+         <IdentityMappedIssuedBy iib:elementType="0x03000000" iib:valueType="CHARACTER"/>
+      </Properties>
+      <HTTPInputHeader iib:parser="WSINPHDR">
+         <Accept-Encoding iib:valueType="CHARACTER">gzip,deflate</Accept-Encoding>
+         <Content-Type iib:valueType="CHARACTER">application/soap+xml;charset=UTF-8;action="http://tempuri.org/SubmitRequest"</Content-Type>
+         <Content-Length iib:valueType="CHARACTER">319</Content-Length>
+         <Host iib:valueType="CHARACTER">localhost:7800</Host>
+         <Connection iib:valueType="CHARACTER">Keep-Alive</Connection>
+         <User-Agent iib:valueType="CHARACTER">Apache-HttpClient/4.5.5 (Java/15)</User-Agent>
+         <X-Original-HTTP-Command iib:valueType="CHARACTER">POST /Milliman HTTP/1.1</X-Original-HTTP-Command>
+         <X-Server-Name iib:valueType="CHARACTER">localhost</X-Server-Name>
+         <X-Server-Port iib:valueType="CHARACTER">7800</X-Server-Port>
+         <X-Remote-Addr iib:valueType="CHARACTER">127.0.0.1</X-Remote-Addr>
+         <X-Remote-Host iib:valueType="CHARACTER">localhost</X-Remote-Host>
+         <X-Scheme iib:valueType="CHARACTER">http</X-Scheme>
+      </HTTPInputHeader>
+      <SOAP iib:parser="SOAP">
+         <Context iib:parser="xmlnsc">
+            <operation iib:elementType="0x03000100" iib:valueType="CHARACTER">SubmitRequest</operation>
+            <operationType iib:elementType="0x03000100" iib:valueType="CHARACTER">REQUEST_RESPONSE</operationType>
+            <portType iib:elementType="0x03000100" iib:valueType="CHARACTER">IASRequestWSSoap</portType>
+            <portTypeNamespace iib:elementType="0x03000100" iib:valueType="CHARACTER">http://tempuri.org/</portTypeNamespace>
+            <port iib:elementType="0x03000100" iib:valueType="CHARACTER">IASRequestWSSoap12</port>
+            <service iib:elementType="0x03000100" iib:valueType="CHARACTER">IASRequestWS</service>
+            <fileName iib:elementType="0x03000100" iib:valueType="CHARACTER">Milliman.wsdl</fileName>
+            <SOAP_Version iib:valueType="CHARACTER">1.2</SOAP_Version>
+            <Namespace xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:tem="http://tempuri.org/"/>
+         </Context>
+         <Header iib:parser="xmlnsc"/>
+         <Body iib:parser="xmlnsc">
+            <NS1:SubmitRequest xmlns:NS1="http://tempuri.org/" iib:prefix="false">
+               <NS1:requestXML iib:prefix="false">
+                  <test iib:valueType="CHARACTER">hello soap</test>
+               </NS1:requestXML>
+            </NS1:SubmitRequest>
+         </Body>
+      </SOAP>
+   </message>
+</MessageAssembly>

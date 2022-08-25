@@ -1,0 +1,18 @@
+BROKER SCHEMA com.metlife.esb
+
+
+CREATE COMPUTE MODULE MillimanIntegration_SubmitRequest_SF_TransformIAStoSPI
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		CALL PopulateHTTPHeaders(OutputRoot);
+		RETURN TRUE;
+END;
+
+
+CREATE PROCEDURE PopulateHTTPHeaders ( IN OutputRoot REFERENCE)
+BEGIN
+	SET OutputRoot.HTTPRequestHeader."Content-Type" 	=	'application/json';  
+	SET OutputRoot.HTTPRequestHeader.Accept				=	'application/json';
+END;
+
+END MODULE;

@@ -1,0 +1,10 @@
+CREATE COMPUTE MODULE MillimanIntegration_RetrieveResponse_TransformIAStoSPI
+	
+/********************************************************************************
+* Description:		<This node retrieves the GBR authentition token from global *
+					cache and sets it in the HTTPRequestHeaders. It also sends	*
+					GUID to METLIFE request to retrieve customer 				*
+					Risk Score value>       									*
+********************************************************************************/
+	
+	CREATE FUNCTION Main() RETURNS BOOLEAN

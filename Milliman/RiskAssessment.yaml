@@ -1,0 +1,930 @@
+---
+swagger: "2.0"
+info:
+  description: "This is a swagger for riskAssessment related methods.\n"
+  version: "1.0.1"
+  title: "RiskAssessment"
+  contact:
+    email: "spi@metlife.com"
+schemes:
+- "https"
+tags:
+- name: "RiskAssessment"
+  description: "API specification related to riskAssessment entity"
+  externalDocs:
+    description: "Find out more"
+    url: "http://swagger.io"
+paths:
+  /riskAssessment/order:
+    post:
+      tags:
+      - "RiskAssessment"
+      summary: "This API is to place a order with risk assessment systems  to get\
+        \ RX,MIB and MVR information and risk score by sending the applicant demographic\
+        \ information"
+      description: "This API is to place a order with external vendor to get RX,MIB\
+        \ and MVR information and risk score by sending the applicant demographic\
+        \ information"
+      operationId: "createRiskAssessmentOrder"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "createRiskAssessmentOrder"
+        in: "body"
+        description: "quote information"
+        required: true
+        schema:
+          $ref: "#/definitions/createRiskAssessmentOrder"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/submitHealtRiskAssessmentResponse"
+        400:
+          description: "Bad request(ex- missing mandatory data)"
+          schema:
+            $ref: "#/definitions/itemError"
+        404:
+          description: "Resource not found for id or name provided in ther URI"
+          schema:
+            $ref: "#/definitions/itemError"
+        500:
+          description: "Internal error"
+          schema:
+            $ref: "#/definitions/itemError"
+      security:
+      - api_key: []
+    parameters:
+    - $ref: "#/parameters/Authorization"
+    - $ref: "#/parameters/Content-Type"
+    - $ref: "#/parameters/Accept"
+    - $ref: "#/parameters/UserId"
+    - $ref: "#/parameters/User-Agent"
+  /riskAssessment/order/{id}:
+    get:
+      tags:
+      - "RiskAssessment"
+      summary: "This API is to retrive the resposne from risk assessment systems by\
+        \ order ID."
+      description: "This API is to retrive the resposne from risk assessment systems\
+        \ by order ID"
+      operationId: "retrieveRiskAssessmentOrder"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "order ID"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/retrieveRiskAssessmentOrder"
+        400:
+          description: "Bad request(ex- missing mandatory data)"
+          schema:
+            $ref: "#/definitions/itemError"
+        404:
+          description: "Resource not found for id or name provided in ther URI"
+          schema:
+            $ref: "#/definitions/itemError"
+        500:
+          description: "Internal error"
+          schema:
+            $ref: "#/definitions/itemError"
+      security:
+      - api_key: []
+    parameters:
+    - $ref: "#/parameters/Authorization"
+    - $ref: "#/parameters/Content-Type"
+    - $ref: "#/parameters/Accept"
+    - $ref: "#/parameters/UserId"
+    - $ref: "#/parameters/User-Agent"
+securityDefinitions:
+  api_key:
+    type: "apiKey"
+    name: "X-IBM-Clinet-Id"
+    in: "header"
+definitions:
+  createRiskAssessmentOrder:
+    type: "object"
+    properties:
+      associatedReferenceID:
+        $ref: "#/definitions/associatedReferenceID"
+      prescriptionFillPriorityListCode:
+        $ref: "#/definitions/prescriptionFillPriorityListCode"
+      inquiryTypeDataCode:
+        $ref: "#/definitions/inquiryTypeDataCode"
+      person:
+        $ref: "#/definitions/person"
+      prescriptions:
+        $ref: "#/definitions/prescriptions"
+  submitHealtRiskAssessmentResponse:
+    type: "object"
+    properties:
+      medicalHistoryOrderID:
+        $ref: "#/definitions/medicalHistoryOrderID"
+      resultCode:
+        $ref: "#/definitions/resultCode"
+      commentText:
+        $ref: "#/definitions/commentText"
+  retrieveRiskAssessmentOrder:
+    type: "object"
+    properties:
+      number:
+        $ref: "#/definitions/number"
+      self:
+        $ref: "#/definitions/self"
+      medicalHistoryOrderID:
+        $ref: "#/definitions/medicalHistoryOrderID"
+      associatedReferenceID:
+        $ref: "#/definitions/associatedReferenceID"
+      inquiryTypeDataCode:
+        $ref: "#/definitions/inquiryTypeDataCode"
+      intervalPollingTimeinSeconds:
+        $ref: "#/definitions/intervalPollingTimeinSeconds"
+      orderResults:
+        $ref: "#/definitions/orderResults"
+      person:
+        type: "object"
+        properties:
+          genderCode:
+            $ref: "#/definitions/genderCode"
+          birthDate:
+            $ref: "#/definitions/birthDate"
+          relationshipCode:
+            $ref: "#/definitions/relationshipCode"
+          governmentIDs:
+            $ref: "#/definitions/governmentIDs"
+          name:
+            $ref: "#/definitions/name"
+          addresses:
+            $ref: "#/definitions/addresses"
+          extension:
+            $ref: "#/definitions/extension"
+      riskRules:
+        $ref: "#/definitions/riskRules"
+      rx:
+        $ref: "#/definitions/rx"
+      MIB:
+        $ref: "#/definitions/MIB"
+      MVR:
+        $ref: "#/definitions/MVR"
+  orderResults:
+    type: "object"
+    properties:
+      resultCode:
+        $ref: "#/definitions/resultCode"
+      resultURLID:
+        $ref: "#/definitions/resultURLID"
+      drugRiskScoreValue:
+        $ref: "#/definitions/drugRiskScoreValue"
+      medicalSearchLocationCount:
+        $ref: "#/definitions/medicalSearchLocationCount"
+      totalPrescriptionCount:
+        $ref: "#/definitions/totalPrescriptionCount"
+      ratingPrescriptions:
+        $ref: "#/definitions/ratingPrescriptions"
+      maximumPrescriptionRatingCode:
+        $ref: "#/definitions/maximumPrescriptionRatingCode"
+  ratingPrescriptions:
+    type: "array"
+    items:
+      $ref: "#/definitions/ratingPrescription"
+  ratingPrescription:
+    type: "object"
+    properties:
+      ratingPrescriptionCount:
+        $ref: "#/definitions/ratingPrescriptionCount"
+      prescriptionRatingCode:
+        $ref: "#/definitions/prescriptionRatingCode"
+      prescriptionRatingDescription:
+        $ref: "#/definitions/prescriptionRatingDescription"
+  resultCodes:
+    type: "array"
+    items:
+      $ref: "#/definitions/resultCodeObject"
+  resultCodeObject:
+    type: "object"
+    properties:
+      resultCode:
+        $ref: "#/definitions/resultCode"
+  rx:
+    type: "object"
+    properties:
+      prescription:
+        $ref: "#/definitions/responsePrescription"
+  responsePrescription:
+    type: "object"
+    properties:
+      prescriptionFillCount:
+        $ref: "#/definitions/prescriptionFillCount"
+      fillListingCompleteIndicator:
+        $ref: "#/definitions/fillListingCompleteIndicator"
+      drugFills:
+        $ref: "#/definitions/drugFills"
+  drugFills:
+    type: "array"
+    items:
+      $ref: "#/definitions/drugFill"
+  drugFill:
+    type: "object"
+    properties:
+      prescriptionID:
+        $ref: "#/definitions/prescriptionID"
+      fillDate:
+        $ref: "#/definitions/fillDate"
+      drugCode:
+        $ref: "#/definitions/drugCode"
+      drugBrandName:
+        $ref: "#/definitions/drugBrandName"
+      drugGenericName:
+        $ref: "#/definitions/drugGenericName"
+      dosageMeasureDescription:
+        $ref: "#/definitions/dosageMeasureDescription"
+      drugQuantityCount:
+        $ref: "#/definitions/drugQuantityCount"
+      drugSupplyPeriodinDays:
+        $ref: "#/definitions/drugSupplyPeriodinDays"
+      drugPriorityCode:
+        $ref: "#/definitions/drugPriorityCode"
+      procedureDiagnosis:
+        $ref: "#/definitions/procedureDiagnosis"
+      party:
+        $ref: "#/definitions/responseParty"
+  responseParty:
+    type: "object"
+    properties:
+      partyID:
+        $ref: "#/definitions/partyID"
+      partyTypeCode:
+        $ref: "#/definitions/partyTypeCode"
+      partyTypeDescription:
+        $ref: "#/definitions/partyTypeDescription"
+      specialtyName:
+        $ref: "#/definitions/specialtyName"
+      name:
+        $ref: "#/definitions/name"
+      addresses:
+        $ref: "#/definitions/addresses"
+      phones:
+        $ref: "#/definitions/phones"
+  classresults:
+    type: "array"
+    items:
+      $ref: "#/definitions/classresult"
+  classresult:
+    type: "object"
+    properties:
+      medicalRiskRuleClassCode:
+        $ref: "#/definitions/medicalRiskRuleClassCode"
+      medicalStatusCode:
+        $ref: "#/definitions/medicalStatusCode"
+      medicalRiskRuleClassDescription:
+        $ref: "#/definitions/medicalRiskRuleClassDescription"
+  rulesHits:
+    type: "array"
+    items:
+      $ref: "#/definitions/rulesHit"
+  rulesHit:
+    type: "object"
+    properties:
+      ruleGroupID:
+        $ref: "#/definitions/ruleGroupID"
+      ruleSubGroupID:
+        $ref: "#/definitions/ruleSubGroupID"
+      riskRuleID:
+        $ref: "#/definitions/riskRuleID"
+      ruleModifierCode:
+        $ref: "#/definitions/ruleModifierCode"
+      riskRuleName:
+        $ref: "#/definitions/riskRuleName"
+      ruleRuleDescription:
+        $ref: "#/definitions/ruleRuleDescription"
+      childRuleHits:
+        $ref: "#/definitions/childRuleHits"
+      classresults:
+        $ref: "#/definitions/classresults"
+  childRuleHits:
+    type: "array"
+    items:
+      $ref: "#/definitions/childRuleHit"
+  childRuleHit:
+    type: "object"
+    properties:
+      ruleGroupID:
+        $ref: "#/definitions/ruleGroupID"
+      ruleSubGroupID:
+        $ref: "#/definitions/ruleSubGroupID"
+      riskRuleID:
+        $ref: "#/definitions/riskRuleID"
+      ruleModifierCode:
+        $ref: "#/definitions/ruleModifierCode"
+      riskRuleName:
+        $ref: "#/definitions/riskRuleName"
+      AssociatedDrugFills:
+        $ref: "#/definitions/AssociatedDrugFills"
+  AssociatedDrugFills:
+    type: "array"
+    items:
+      $ref: "#/definitions/AssociatedDrugFill"
+  AssociatedDrugFill:
+    type: "object"
+    properties:
+      prescriptionID:
+        $ref: "#/definitions/prescriptionID"
+  riskRules:
+    type: "object"
+    properties:
+      medicalRiskRuleCount:
+        $ref: "#/definitions/medicalRiskRuleCount"
+      classresults:
+        $ref: "#/definitions/classresults"
+      rulesHits:
+        $ref: "#/definitions/rulesHits"
+  MIB:
+    type: "object"
+    properties:
+      resultCodes:
+        $ref: "#/definitions/resultCodes"
+      responseBLOB:
+        $ref: "#/definitions/responseBLOB"
+  MVR:
+    type: "object"
+    properties:
+      responseBLOB:
+        $ref: "#/definitions/responseBLOB"
+  person:
+    type: "object"
+    properties:
+      genderCode:
+        $ref: "#/definitions/genderCode"
+      birthDate:
+        $ref: "#/definitions/birthDate"
+      relationshipCode:
+        $ref: "#/definitions/relationshipCode"
+      signatureMethodCode:
+        $ref: "#/definitions/signatureMethodCode"
+      signatureMethodDescription:
+        $ref: "#/definitions/signatureMethodDescription"
+      governmentIDs:
+        $ref: "#/definitions/governmentIDs"
+      name:
+        $ref: "#/definitions/name"
+      addresses:
+        $ref: "#/definitions/addresses"
+      overrideRiskRuleFilterIndicator:
+        $ref: "#/definitions/overrideRiskRuleFilterIndicator"
+      typeDataCodes:
+        $ref: "#/definitions/typeDataCodes"
+      extension:
+        $ref: "#/definitions/extension"
+  prescriptions:
+    type: "array"
+    items:
+      $ref: "#/definitions/prescription"
+  prescription:
+    type: "object"
+    properties:
+      drugCode:
+        $ref: "#/definitions/drugCode"
+      fillDate:
+        $ref: "#/definitions/fillDate"
+      drugQuantityCount:
+        $ref: "#/definitions/drugQuantityCount"
+      drugSupplyPeriodinDays:
+        $ref: "#/definitions/drugSupplyPeriodinDays"
+      procedureDiagnosis:
+        $ref: "#/definitions/procedureDiagnosis"
+      party:
+        $ref: "#/definitions/parties"
+  typeDataCodes:
+    type: "array"
+    items:
+      $ref: "#/definitions/typeDataCodeObject"
+  typeDataCodeObject:
+    type: "object"
+    properties:
+      typeDataCode:
+        $ref: "#/definitions/typeDataCode"
+  governmentIDs:
+    type: "array"
+    items:
+      $ref: "#/definitions/governmentIDobject"
+  governmentIDobject:
+    type: "object"
+    properties:
+      governmentID:
+        $ref: "#/definitions/governmentID"
+      governmentIDTypeCode:
+        $ref: "#/definitions/governmentIDTypeCode"
+      governmentIDTypeDescription:
+        $ref: "#/definitions/governmentIDTypeDescription"
+  procedureDiagnosis:
+    type: "array"
+    items:
+      $ref: "#/definitions/procedureDiagnosisobject"
+  procedureDiagnosisobject:
+    type: "object"
+    properties:
+      procedureDiagnosisCode:
+        $ref: "#/definitions/procedureDiagnosisCode"
+      procedureDiagnosisDescription:
+        $ref: "#/definitions/procedureDiagnosisDescription"
+      procedureDiagnosisTypeCode:
+        $ref: "#/definitions/procedureDiagnosisTypeCode"
+      procedureDiagnosisTypeDescription:
+        $ref: "#/definitions/procedureDiagnosisTypeDescription"
+  parties:
+    type: "array"
+    items:
+      $ref: "#/definitions/party"
+  party:
+    type: "object"
+    properties:
+      partyID:
+        $ref: "#/definitions/partyID"
+      partyTypeCode:
+        $ref: "#/definitions/partyTypeCode"
+      partyTypeDescription:
+        $ref: "#/definitions/partyTypeDescription"
+  extension:
+    type: "object"
+    properties:
+      additionalAttributes:
+        $ref: "#/definitions/additionalAttributes"
+  additionalAttributes:
+    type: "array"
+    items:
+      $ref: "#/definitions/additionalAttribute"
+  additionalAttribute:
+    type: "object"
+    properties:
+      dataRequirementName:
+        $ref: "#/definitions/dataRequirementName"
+      dataRequirementValue:
+        $ref: "#/definitions/dataRequirementValue"
+  name:
+    type: "object"
+    properties:
+      personGiven1Name:
+        type: "string"
+        description: "Given Name - The name given to an individual which does not\
+          \ denote his/her family, tribal or geographic antecedents. It may be represented\
+          \ via one or more words, which collectively represent the given name. Examples:The\
+          \ name - William Shakepeare William  is the given name, also known as  first\
+          \ name  in some locales.  Shakespeare  is the surname, also known as  last\
+          \ name  in some locales. The name - Mary Beth Doe  Mary Beth  is the given\
+          \ name.  Doe  is the surname.  The first given name of the person. In the\
+          \ USA, commonly called First Name."
+      personLastName:
+        type: "string"
+        description: "A family name (in Western contexts often referred to as a last\
+          \ name) is a type of surname and part of a persons name indicating the family\
+          \ to which the person belongs."
+      personGiven2Name:
+        type: "string"
+        description: "The second given name of the person. In the US, commonly called\
+          \ Middle Name"
+      personSuffixofName:
+        type: "string"
+        description: "Suffix of Name of the person"
+      personPrefixofName:
+        type: "string"
+        description: "Prefix of Name of the person"
+      personMaidenName:
+        type: "string"
+        description: "Last name of the person before marriage"
+      personFullName:
+        type: "string"
+        description: "Full name of the person"
+  addresses:
+    type: "array"
+    items:
+      $ref: "#/definitions/addressItems"
+  addressItems:
+    type: "object"
+    properties:
+      addressTypeCode:
+        type: "string"
+        description: "Type code example - Business, Residence, Present, Permanent,\
+          \ Billing Address"
+      addressTypeDescription:
+        type: "string"
+        description: "Description of the address Type code"
+      address1Line:
+        type: "string"
+        description: "Address Line 1"
+      address2Line:
+        type: "string"
+        description: "Address Line 2"
+      address3Line:
+        type: "string"
+        description: "Address Line 3"
+      address4Line:
+        type: "string"
+        description: "Address Line 4"
+      ISO2CharacterCountryCode:
+        type: "string"
+        description: "Country code in  ISO2 country code format"
+      cityName:
+        type: "string"
+        description: "City Name"
+      addressFormatCode:
+        type: "string"
+        description: "Identify  address. Example  US - U Canada - C  non-US and non-Canada\
+          \ - I"
+      extension:
+        $ref: "#/definitions/addressUSA"
+  addressUSA:
+    type: "object"
+    properties:
+      zipDeliveryOfficeCode:
+        type: "string"
+        description: "ZIP code in US"
+      zipDeliverySegmentCode:
+        type: "string"
+        description: "ZIP code in US"
+      stateCode:
+        type: "string"
+        description: "State code in US"
+      forwardSortationAreaCode:
+        type: "string"
+        description: "ZIP code in Canada"
+      localDeliveryUnitCode:
+        type: "string"
+        description: "ZIP code in Canada"
+      provinceCode:
+        type: "string"
+        description: "State code in Canada"
+      internationalStateName:
+        type: "string"
+        description: "International State Name"
+      internationalPostalCode:
+        type: "string"
+        description: "International Postal Code"
+  phones:
+    type: "array"
+    items:
+      $ref: "#/definitions/phone"
+  phone:
+    type: "object"
+    properties:
+      phoneTypeCode:
+        type: "string"
+        description: "Alternate, Business, Fax, Mobile, Pager, Personal"
+      phoneTypeDescription:
+        type: "string"
+        description: "This denotes the type of phone - home, fax, business, etc"
+      preferredIndicator:
+        type: "boolean"
+        description: "Is this the preferred phone number in which the party wants\
+          \ to be contacted (Y/N)"
+      countryISOAlphabetic2Code:
+        type: "string"
+        description: "Country code in  ISO2 country code format"
+      countryISOAlphabetic3Code:
+        type: "string"
+        description: "Country code in  ISO3 country code format"
+      countryName:
+        type: "string"
+        description: "Country Name"
+      extension:
+        $ref: "#/definitions/phoneUSAExtension"
+  phoneUSAExtension:
+    type: "object"
+    properties:
+      areaCode:
+        type: "string"
+        description: "Local Area Code"
+      phoneNumber:
+        type: "string"
+        description: "Actual Number"
+      extensionPhoneNumber:
+        type: "string"
+        description: "This is the additional numbers to dial to reach a specific person\
+          \  using a shared main Phone Number."
+  partyID:
+    type: "string"
+    description: "PartyID is a unique value assigned within MetLife to identify an\
+      \ entity. A id can be an organization (Bank, Customer, etc) or a person (Employee,\
+      \ Admin unit representative, policy number, etc)"
+  partyTypeCode:
+    type: "string"
+    description: "Type of the party (person or organization)"
+  governmentID:
+    type: "string"
+    description: "An identification number is used by the government"
+  governmentIDTypeCode:
+    type: "string"
+    description: "SSN, Green Card, Taxpayer ID, ARC number, PAN number, ACN number\
+      \ etc"
+  birthDate:
+    type: "string"
+    description: "BirthDate of person"
+  genderCode:
+    type: "string"
+    description: "Gender of the person"
+  relationshipCode:
+    type: "string"
+    description: "Defines the relation to employee/member or policy Example Self,\
+      \ Spouse, Child, Primary Insured, etc"
+  partyTypeDescription:
+    type: "string"
+    description: "Description of Type of the party (person or organization)"
+  governmentIDTypeDescription:
+    type: "string"
+    description: "The description of type of governmentid provided"
+  associatedReferenceID:
+    type: "string"
+    description: "Client generated field typically containing a unique value representing\
+      \ the case. A policy number, order number or case number is typically the choice\
+      \ for this field"
+  prescriptionFillPriorityListCode:
+    type: "string"
+    description: "prescriptionFillPriorityListCode"
+  inquiryTypeDataCode:
+    type: "string"
+    description: "The requestType element should be populated with “INDIVIDUAL”. Example\
+      \ - When a request is sent to Milliman application enquiring about an Individuals\
+      \ Medical Prescriptions history and the individuals risk scrore. The inquiry\
+      \ parameter that needs to be passed is INDIVIDUAL"
+  signatureMethodCode:
+    type: "string"
+    description: "This can be used for how application is signed. It is an important\
+      \ field and should be passed with all order submissions. This field may be shown\
+      \ as not required by the schema, but should be treated as required.Valid values\
+      \ are WET – Paper authorization with signed signature. ESIG – Electronic signature\
+      \ was used. Typical use is with simplified issue web products. ORAL – Voice\
+      \ signature recorded via telephone or other recording device.Orders without\
+      \ a valid signature type may not process correctly and potentially will appear\
+      \ as never ready."
+  signatureMethodDescription:
+    type: "string"
+    description: "This can be used for how application is signed. It is an important\
+      \ field and should be passed with all order submissions. This field may be shown\
+      \ as not required by the schema, but should be treated as required.Valid values\
+      \ are WET – Paper authorization with signed signature. ESIG – Electronic signature\
+      \ was used. Typical use is with simplified issue web products. ORAL – Voice\
+      \ signature recorded via telephone or other recording device.Orders without\
+      \ a valid signature type may not process correctly and potentially will appear\
+      \ as never ready."
+  overrideRiskRuleFilterIndicator:
+    type: "string"
+    description: "Do not pass unless instructed - Limited client use, 1 true, 0 false,\
+      \ default true.This use of this is customizable internally within the Milliman\
+      \ code for specific clients and allows limiting which rule sets are applied\
+      \ when this is set to 1.Yes, this will have a numeric value."
+  typeDataCode:
+    type: "string"
+    description: "This element contains instructions indicating which IntelliScript\
+      \ data elements are parts of the order. MIB and MVR features are only available\
+      \ when used with RxRules. RX – The RX (fill) information will be gathered and\
+      \ used. MIB – An MIB request for data will be submitted and processed as part\
+      \ of the order MVR – A Motor Vehicle Record will be ordered and processed as\
+      \ part of the IntelliScript order."
+  drugCode:
+    type: "string"
+    description: "This is the value used by a region/country to identify a drug/medicine\
+      \ US – The NDC, or National Drug Code, is a unique 10-digit, 3-segment number.\
+      \ It is a universal product identifier for human drugs in the United States.\
+      \ The code is present on all nonprescription (OTC) and prescription medication\
+      \ packages and inserts in the US. The 3 segments of the NDC identify the labeler,\
+      \ the product, and the commercial package size. The first set of numbers in\
+      \ the NDC identifies the labeler (manufacturer, repackager, or distributer).\
+      \ The second set of numbers is the product code, which identifies the specific\
+      \ strength, dosage form (i.e, capsule, tablet, liquid) and formulation of a\
+      \ drug for a specific manufacturer. Finally, the third set is the package code,\
+      \ which identifies package sizes and types. The labeler code is assigned by\
+      \ the FDA, while the product and package code are assigned by the labeler"
+  medicalRiskRuleCount:
+    type: "string"
+    description: "Count of number of rule messages that hit for this applicant."
+  drugQuantityCount:
+    type: "string"
+    description: "Number of days supplied, required for client-supplied fill. Must\
+      \ be a value between 0 and 999."
+  drugSupplyPeriodinDays:
+    type: "string"
+    description: "Number of days supplied, required for client-supplied fill. Must\
+      \ be a value between 0 and 999."
+  procedureDiagnosisCode:
+    type: "string"
+    description: "This is the medical/vision code to identify the procedure/service\
+      \ or diagnosis."
+  procedureDiagnosisDescription:
+    type: "string"
+    description: "This is the medical/vision code to identify the procedure/service\
+      \ or diagnosis."
+  procedureDiagnosisTypeCode:
+    type: "string"
+    description: "This is the kind of procedure or diagnosis code Exampels ICD9, ICD10"
+  procedureDiagnosisTypeDescription:
+    type: "string"
+    description: "This is the kind of procedure or diagnosis code Exampels ICD9, ICD10"
+  dataRequirementName:
+    type: "string"
+    description: "This is the name of the data requirement/element"
+  dataRequirementValue:
+    type: "string"
+    description: "This is the value of the data requirement/element"
+  intervalPollingTimeinSeconds:
+    type: "string"
+    description: "MinimumResponsePollingTime will have the incremental wait time in\
+      \ seconds that you should use when polling for the response. Once the response\
+      \ is ready the value will be 0."
+  number:
+    type: "string"
+    description: "unquiue identifer for the resource"
+  self:
+    type: "string"
+    description: "self URL for the resource"
+  medicalHistoryOrderID:
+    type: "string"
+    description: "Unique ID for the submitted order"
+  resultCode:
+    type: "string"
+    description: "This is the result code from the service call (Ex. Success/Failure/other\
+      \ messages)"
+  commentText:
+    type: "string"
+    description: "Comments relating to any activity or any action performed"
+  resultURLID:
+    type: "string"
+    description: "URL that takes a logged in user directly to the order within IntelliScript’\
+      s website.&#10;This URL is not pre-authenticated and would require the user\
+      \ to login if they don’t&#10;already have a valid session."
+  drugRiskScoreValue:
+    type: "string"
+    description: "For clients using Milliman Risk Score, the score is returned here.&#10;This\
+      \ is a ‘legacy’ element and is not used/send for any new implementations, we\
+      \ do not need to map this.&#10;This is a Risk Score used by ‘legacy’ applications\
+      \ and is replaced with RxScore for current implementations."
+  medicalSearchLocationCount:
+    type: "string"
+    description: "The number of members/employees eligible for coverage."
+  totalPrescriptionCount:
+    type: "string"
+    description: "Number of prescriptions found for this person that match the search\
+      \ criteria setup for MetLife"
+  ratingPrescriptionCount:
+    type: "string"
+    description: "Number of drug prescriptions found for this applicant that were\
+      \ rated as per  the criteria setup for MetLife. Example ratings are &apos;High&apos;,\
+      \ &apos;Medium&apos;, or &apos;Low&apos;"
+  prescriptionRatingCode:
+    type: "string"
+    description: "Rating of the drug prescriptions as per  the criteria setup for\
+      \ MetLife. Example ratings are &apos;High&apos;, &apos;Medium&apos;, or &apos;Low&apos;"
+  prescriptionRatingDescription:
+    type: "string"
+    description: "Rating Description that goes with the respective code for the drug\
+      \ prescriptions. Example ratings are &apos;High&apos;, &apos;Medium&apos;, or\
+      \ &apos;Low&apos;"
+  maximumPrescriptionRatingCode:
+    type: "string"
+    description: "The highest level of priority for the prescriptions that were found\
+      \ for this applicant"
+  medicalRiskRuleClassCode:
+    type: "string"
+    description: "Index identifies the class. When coding decisions the index should\
+      \ always be used as the reference, never the identifier.&#10;Unique identifier\
+      \ for a client defined Class for evaluation.  Example would be Non-Tobacco.\
+      \  The ClassResult returned will be based on the specific rules and criteria\
+      \ setup for that Class"
+  medicalStatusCode:
+    type: "string"
+    description: "Level is the rule result status (decision) for the class, which\
+      \ can be 0,10,20,30.&#10;Corresponding to Accept, Accept, Review, and Alert\
+      \ respectively"
+  medicalRiskRuleClassDescription:
+    type: "string"
+    description: "Identifier is a text field to identify the class for informational\
+      \ purposes only, no coding should use the identifier. The index is used to identify\
+      \ which class the decision was for.&#10;There is a 1 to 1 correspondence between\
+      \ this identifier and Index.  It uniquely identifies the Class but uses text\
+      \ so that it is easier to translate."
+  ruleGroupID:
+    type: "string"
+    description: "Group identifier for the rule.&#10;RiskRules (for which this is\
+      \ defined as part of) contains the specific Rules that are triggered.  RuleGroupIdent\
+      \ is a way of grouping individual rules together.  It is completely separate\
+      \ from RiskRuleClass which is a way of classifying the results for the status."
+  ruleSubGroupID:
+    type: "string"
+    description: "Subgroup identifier for the rule."
+  riskRuleID:
+    type: "string"
+    description: "Identifier for a rule returned (unique for that rule)."
+  ruleModifierCode:
+    type: "string"
+    description: "Modifier for the rule returned.&#10;When the rules are setup (or\
+      \ calibrated is the term Milliman uses), MetLife would specify if a modifier\
+      \ needs to be used to put more detail into the rule.  It refines the rule. \
+      \ An example could be a situation where we are looking to see if a prescription\
+      \ for a particular drug has been filled and the modifier could then refine that\
+      \ to say ‘within the last 6 months’."
+  riskRuleName:
+    type: "string"
+    description: "First 50 characters of rule that triggered. Provided with RuleIdent."
+  ruleRuleDescription:
+    type: "string"
+    description: "75 character extended rule text field. Provided per client request.\
+      \ More detailed description for the rule."
+  prescriptionID:
+    type: "string"
+    description: "Unique id for each drug prescription"
+  prescriptionFillCount:
+    type: "string"
+    description: "Total number of times prescriptions were filled (vs the number of\
+      \ prescriptions given)"
+  fillListingCompleteIndicator:
+    type: "boolean"
+    description: "Based on the customer specific requirements this indicates if the\
+      \ prescription filled results are considered complete."
+  fillDate:
+    type: "string"
+    description: "Date on which the prescription is filled by the pharmacy"
+  drugBrandName:
+    type: "string"
+    description: "Brand Name of the drug with which the drug is marketed and sold\
+      \ in the pharmacy"
+  drugGenericName:
+    type: "string"
+    description: "Generic Drug name with which the drug is sold in the pharmacy"
+  dosageMeasureDescription:
+    type: "string"
+    description: "Dosage of the drug as prescribed by the Physician. Example - When\
+      \ dosage is 20 mcg, the value stroed in this element is micrograms, that is\
+      \ the description for mcg"
+  drugPriorityCode:
+    type: "string"
+    description: "Priority of the drug as defined by MetLife during the setup of the\
+      \ interaction with Milliman. Examples - Low, Medium, High"
+  specialtyName:
+    type: "string"
+    description: "This is the kind of medicine a healthcare provider practices. The\
+      \ healthcare provider is not restricted to being a physican"
+  responseBLOB:
+    type: "string"
+    description: "Element containing the complete XML response from MIB in a BLOB\
+      \ format"
+  itemError:
+    type: "object"
+    properties:
+      errors:
+        $ref: "#/definitions/error"
+  error:
+    type: "array"
+    items:
+      $ref: "#/definitions/errors"
+  errors:
+    type: "object"
+    properties:
+      errorCode:
+        type: "string"
+      errorDescription:
+        type: "string"
+      providerCode:
+        type: "string"
+      providerDescription:
+        type: "string"
+parameters:
+  Authorization:
+    name: "Authorization"
+    type: "string"
+    required: true
+    in: "header"
+    description: "Token Authorization"
+  Content-Type:
+    name: "Content-Type"
+    type: "string"
+    required: true
+    in: "header"
+    description: "Content-Type as JSON or XML"
+  Accept:
+    name: "Accept"
+    type: "string"
+    required: true
+    in: "header"
+    description: "pass value as application/json"
+  UserId:
+    name: "UserId"
+    type: "string"
+    required: true
+    in: "header"
+    description: "Pass value as userid of the systems which is calling this API"
+  User-Agent:
+    name: "User-Agent"
+    type: "string"
+    required: true
+    in: "header"
+    description: "Pass Value as name of the Systems is calling the API"
+host: "dev.api.metlife.com"
+basePath: "/riskAssessmentServices/api/v1"

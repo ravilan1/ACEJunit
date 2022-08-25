@@ -1,0 +1,27 @@
+CREATE COMPUTE MODULE MillimanIntegration_SubmitRequest_SF_TransformIAStoSPI
+	
+/********************************************************************************
+* Description:		<This node retrieves the GBR authentition token from global *
+					cache and sets it in the HTTPRequestHeaders. It also 		*
+					creates METLIFE request to submit customer information to   *
+					calculate Risk Score value>       							*
+********************************************************************************/
+	
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		
+		CALL PopulateHTTPHeaders(OutputRoot);
+		RETURN TRUE;
+END;
+
+/********************************************************************************
+* Node Name:		<TransformIAStoSPI>                     					*
+* Module Name:		<PopulateHTTPHeaders>    									*               
+* Description:		<Populate HTTPHeaders>										*
+********************************************************************************/
+CREATE PROCEDURE PopulateHTTPHeaders ( IN OutputRoot REFERENCE)
+BEGIN
+	SET OutputRoot.HTTPRequestHeader."Content-Type" 	=	'application/json';  
+	SET OutputRoot.HTTPRequestHeader.Accept				=	'application/json';
+END;
+END MODULE;

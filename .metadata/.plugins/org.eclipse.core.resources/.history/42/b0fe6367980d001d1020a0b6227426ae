@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ComIbmLabel.msgnode="ComIbmLabel.msgnode" xmlns:ComIbmSOAPExtract.msgnode="ComIbmSOAPExtract.msgnode" xmlns:ComIbmSOAPInput.msgnode="ComIbmSOAPInput.msgnode" xmlns:ComIbmSOAPReply.msgnode="ComIbmSOAPReply.msgnode" xmlns:com_metlife_esb_MillimanIntegration_RetrieveResponse.subflow="com/metlife/esb/MillimanIntegration_RetrieveResponse.subflow" xmlns:com_metlife_esb_MillimanIntegration_SubmitRequest_SF.subflow="com/metlife/esb/MillimanIntegration_SubmitRequest_SF.subflow"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:eflow="http://www.ibm.com/wbi/2005/eflow" xmlns:mbmonitor="http://www.ibm.com/wbi/2008/eflow_mbmonitor" xmlns:utility="http://www.ibm.com/wbi/2005/eflow_utility" nsURI="com/metlife/esb/Milliman_RiskAssessment_MF.msgflow" nsPrefix="com_metlife_esb_Milliman_RiskAssessment_MF.msgflow">
+  <eClassifiers xmi:type="eflow:FCMComposite" name="FCMComposite_1">
+    <eSuperTypes href="http://www.ibm.com/wbi/2005/eflow#//FCMBlock"/>
+    <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="Property.baseURL" name="baseURL" defaultValueLiteral="https://10.214.240.82:5006/metlife/integration/channel/gvwb/riskAssessmentServices/api/v1">
+      <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="Property.clientId" name="clientId" lowerBound="1" defaultValueLiteral="98a83871-622b-4ba6-b7e0-c9c390854d05">
+      <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="Property.configurableServiceName" name="configurableServiceName" lowerBound="1" defaultValueLiteral="GBR_ERLAuthentication_ConfigService">
+      <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="Property.userAgent" name="userAgent" lowerBound="1" defaultValueLiteral="UA">
+      <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="Property.userId" name="userId" lowerBound="1" defaultValueLiteral="SMD">
+      <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <translation xmi:type="utility:TranslatableString" key="Milliman_RiskAssessment_MF" bundleName="com/metlife/esb/Milliman_RiskAssessment_MF" pluginId="Milliman_RiskAssessment_APP"/>
+    <colorGraphic16 xmi:type="utility:GIFFileGraphic" resourceName="platform:/plugin/Milliman_RiskAssessment_APP/icons/full/obj16/Milliman_RiskAssessment_MF.gif"/>
+    <colorGraphic32 xmi:type="utility:GIFFileGraphic" resourceName="platform:/plugin/Milliman_RiskAssessment_APP/icons/full/obj30/Milliman_RiskAssessment_MF.gif"/>
+    <composition>
+      <nodes xmi:type="ComIbmSOAPInput.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_1" location="38,107" wsdlFileName="Milliman.wsdl" selectedPortType="IASRequestWSSoap" selectedBinding="IASRequestWSSoap12" selectedPort="IASRequestWSSoap12" targetNamespace="http://tempuri.org/" useHTTPTransport="true" urlSelector="/Milliman" maxClientWaitTime="20" parserXmlnscBuildTreeUsingXMLSchema="false" validateMaster="none">
+        <translation xmi:type="utility:ConstantString" string="Milliman Input"/>
+        <shortDescription xmi:type="utility:ConstantString" string="SOAP Input Node to receive Milliman Request"/>
+        <longDescription xmi:type="utility:ConstantString" string="SOAP Input Node to Receive Milliman request. Input message is embedded in CDATA field andcoressponding Schema File is placed inside other resources folder."/>
+        <monitorEvents eventSourceDescription="Transaction start" eventSourceName="Milliman Input.transaction.Start" eventIdentity="Milliman Input.TransactionStart">
+          <eventXMLDoc xmi:type="mbmonitor:MonitorEvent">
+            <globalTransactionCorrelator/>
+            <parentTransactionCorrelator/>
+            <localTransactionCorrelator dataLocation="$LocalEnvironment/Destination/SOAP/Reply/ReplyIdentifier" eventCorrelation="dataLocation"/>
+            <bitStreamData encoding="base64Binary"/>
+            <eventName literal="Milliman Input.TransactionStart"/>
+            <eventFilter dataLocation="true()" isXPath="true"/>
+          </eventXMLDoc>
+        </monitorEvents>
+        <monitorEvents eventSourceDescription="Failure terminal" eventSourceName="Milliman Input.terminal.failure" eventIdentity="Milliman Input.FailureTerminal">
+          <eventXMLDoc xmi:type="mbmonitor:MonitorEvent">
+            <globalTransactionCorrelator/>
+            <parentTransactionCorrelator/>
+            <localTransactionCorrelator/>
+            <bitStreamData encoding="none" bitstreamContent="none"/>
+            <eventName literal="Milliman Input.FailureTerminal"/>
+            <eventFilter dataLocation="true()" isXPath="true"/>
+          </eventXMLDoc>
+        </monitorEvents>
+        <monitorEvents eventSourceDescription="Catch terminal" eventSourceName="Milliman Input.terminal.catch" eventIdentity="Milliman Input.CatchTerminal">
+          <eventXMLDoc xmi:type="mbmonitor:MonitorEvent">
+            <globalTransactionCorrelator/>
+            <parentTransactionCorrelator/>
+            <localTransactionCorrelator/>
+            <bitStreamData encoding="none" bitstreamContent="none"/>
+            <eventName literal="Milliman Input.CatchTerminal"/>
+            <eventFilter dataLocation="true()" isXPath="true"/>
+          </eventXMLDoc>
+        </monitorEvents>
+        <monitorEvents eventSourceDescription="Transaction end" eventSourceName="Milliman Input.transaction.End" eventIdentity="Milliman Input.TransactionEnd">
+          <eventXMLDoc xmi:type="mbmonitor:MonitorEvent">
+            <globalTransactionCorrelator/>
+            <parentTransactionCorrelator/>
+            <localTransactionCorrelator/>
+            <bitStreamData encoding="base64Binary"/>
+            <eventName literal="Milliman Input.TransactionEnd"/>
+            <eventFilter dataLocation="true()" isXPath="true"/>
+          </eventXMLDoc>
+        </monitorEvents>
+      </nodes>
+      <nodes xmi:type="ComIbmSOAPExtract.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_2" location="199,104" routeToOperation="true">
+        <translation xmi:type="utility:ConstantString" string="SOAP Extract"/>
+        <shortDescription xmi:type="utility:ConstantString" string="Extract body and route to operation specific Subflow"/>
+        <longDescription xmi:type="utility:ConstantString" string="Removes SOAP envelop and extracts SOAP body and routes the message to operation specific Label&#xD;&#xA;Operations : SubmitRequest and RetrieveResponse&#xD;&#xA;"/>
+      </nodes>
+      <nodes xmi:type="ComIbmLabel.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_3" location="193,190" labelName="SubmitRequest">
+        <translation xmi:type="utility:ConstantString" string="SubmitRequest"/>
+        <shortDescription xmi:type="utility:ConstantString" string="SubmitRequest Operation "/>
+        <longDescription xmi:type="utility:ConstantString" string="SubmitRequest Operation "/>
+      </nodes>
+      <nodes xmi:type="ComIbmLabel.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_4" location="187,293" labelName="RetrieveResponse">
+        <translation xmi:type="utility:ConstantString" string="RetrieveResponse"/>
+        <shortDescription xmi:type="utility:ConstantString" string="RetrieveResponse Operation"/>
+        <longDescription xmi:type="utility:ConstantString" string="RetrieveResponse Operation"/>
+      </nodes>
+      <nodes xmi:type="com_metlife_esb_MillimanIntegration_SubmitRequest_SF.subflow:FCMComposite_1" xmi:id="FCMComposite_1_5" location="345,190">
+        <translation xmi:type="utility:ConstantString" string="MillimanIntegration_SubmitRequest_SF"/>
+        <shortDescription xmi:type="utility:ConstantString" string="SubmitRequest Operation Implementation"/>
+        <longDescription xmi:type="utility:ConstantString" string="Converts Milliman Format File to Metlife SPI Format, which has information about customer to get his risk assessement score. All the details are first submitted to Milliman system and risk score is retrieved during get operation. OrderReference field is used as unique id to track the request and GUID will be generated and passed in response by RMT."/>
+      </nodes>
+      <nodes xmi:type="ComIbmSOAPReply.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_6" location="765,229">
+        <translation xmi:type="utility:ConstantString" string="Milliman Reply"/>
+        <shortDescription xmi:type="utility:ConstantString" string="SOAP Reply node returns RMT response"/>
+        <longDescription xmi:type="utility:ConstantString" string="SOAP Reply node returns RMT response"/>
+        <monitorEvents eventSourceDescription="In terminal" eventSourceName="Milliman Reply.terminal.in" eventIdentity="Milliman Reply.InTerminal">
+          <eventXMLDoc xmi:type="mbmonitor:MonitorEvent">
+            <globalTransactionCorrelator/>
+            <parentTransactionCorrelator/>
+            <localTransactionCorrelator/>
+            <bitStreamData encoding="none" bitstreamContent="none"/>
+            <eventName literal="Milliman Reply.InTerminal"/>
+            <eventFilter dataLocation="true()" isXPath="true"/>
+          </eventXMLDoc>
+        </monitorEvents>
+      </nodes>
+      <nodes xmi:type="com_metlife_esb_MillimanIntegration_RetrieveResponse.subflow:FCMComposite_1" xmi:id="FCMComposite_1_7" location="347,293">
+        <translation xmi:type="utility:ConstantString" string="MillimanIntegration_RetrieveResponse"/>
+        <shortDescription xmi:type="utility:ConstantString" string="RetrieveResponse Operation Implementation"/>
+        <longDescription xmi:type="utility:ConstantString" string="Converts Milliman Format File to Metlife SPI Format and vice-versa, which has information of customer risk assessement score.  Tracking ID is used to retrieve customer information, which is always generated by RMT."/>
+      </nodes>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_1" targetNode="FCMComposite_1_2" sourceNode="FCMComposite_1_1" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_2" targetNode="FCMComposite_1_5" sourceNode="FCMComposite_1_3" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.Input"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_3" targetNode="FCMComposite_1_6" sourceNode="FCMComposite_1_5" sourceTerminalName="OutTerminal.Output" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_4" targetNode="FCMComposite_1_7" sourceNode="FCMComposite_1_4" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.Input"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_5" targetNode="FCMComposite_1_6" sourceNode="FCMComposite_1_7" sourceTerminalName="OutTerminal.Output" targetTerminalName="InTerminal.in"/>
+    </composition>
+    <propertyOrganizer>
+      <propertyDescriptor groupName="Group.Basic" propertyEditor="com.ibm.etools.mft.ibmnodes.editors.URLPropertyEditor" configurable="true" describedAttribute="Property.baseURL">
+        <propertyName xmi:type="utility:TranslatableString" key="Property.baseURL" bundleName="ComIbmRESTRequest" pluginId="com.ibm.etools.mft.ibmnodes.definitions"/>
+        <propertyDescriptor groupName="Group.Config" configurable="true" userDefined="true" describedAttribute="Property.clientId">
+          <propertyName xmi:type="utility:TranslatableString" key="Property.clientId" bundleName="com/metlife/esb/MillimanIntegration_SubmitRequest_SF" pluginId="Milliman_RiskAssessment_APP"/>
+          <propertyDescriptor groupName="Group.Config" configurable="true" userDefined="true" describedAttribute="Property.configurableServiceName">
+            <propertyName xmi:type="utility:TranslatableString" key="Property.configurableServiceName" bundleName="com/metlife/esb/MillimanIntegration_SubmitRequest_SF" pluginId="Milliman_RiskAssessment_APP"/>
+            <propertyDescriptor groupName="Group.Config" configurable="true" userDefined="true" describedAttribute="Property.userAgent">
+              <propertyName xmi:type="utility:TranslatableString" key="Property.userAgent" bundleName="com/metlife/esb/MillimanIntegration_SubmitRequest_SF" pluginId="Milliman_RiskAssessment_APP"/>
+              <propertyDescriptor groupName="Group.Config" configurable="true" userDefined="true" describedAttribute="Property.userId">
+                <propertyName xmi:type="utility:TranslatableString" key="Property.userId" bundleName="com/metlife/esb/MillimanIntegration_SubmitRequest_SF" pluginId="Milliman_RiskAssessment_APP"/>
+              </propertyDescriptor>
+            </propertyDescriptor>
+          </propertyDescriptor>
+        </propertyDescriptor>
+      </propertyDescriptor>
+    </propertyOrganizer>
+    <attributeLinks promotedAttribute="Property.baseURL" overriddenNodes="FCMComposite_1_5">
+      <overriddenAttribute href="com/metlife/esb/MillimanIntegration_SubmitRequest_SF.subflow#Property.baseURL"/>
+    </attributeLinks>
+    <attributeLinks promotedAttribute="Property.baseURL" overriddenNodes="FCMComposite_1_7">
+      <overriddenAttribute href="com/metlife/esb/MillimanIntegration_RetrieveResponse.subflow#Property.baseURL"/>
+    </attributeLinks>
+    <attributeLinks promotedAttribute="Property.clientId" overriddenNodes="FCMComposite_1_5">
+      <overriddenAttribute href="com/metlife/esb/MillimanIntegration_SubmitRequest_SF.subflow#Property.clientId"/>
+    </attributeLinks>
+    <attributeLinks promotedAttribute="Property.clientId" overriddenNodes="FCMComposite_1_7">
+      <overriddenAttribute href="com/metlife/esb/MillimanIntegration_RetrieveResponse.subflow#Property.clientId"/>
+    </attributeLinks>
+    <attributeLinks promotedAttribute="Property.configurableServiceName" overriddenNodes="FCMComposite_1_5">
+      <overriddenAttribute href="com/metlife/esb/MillimanIntegration_SubmitRequest_SF.subflow#Property.configurableServiceName"/>
+    </attributeLinks>
+    <attributeLinks promotedAttribute="Property.configurableServiceName" overriddenNodes="FCMComposite_1_7">
+      <overriddenAttribute href="com/metlife/esb/MillimanIntegration_RetrieveResponse.subflow#Property.configurableServiceName"/>
+    </attributeLinks>
+    <attributeLinks promotedAttribute="Property.userAgent" overriddenNodes="FCMComposite_1_5">
+      <overriddenAttribute href="com/metlife/esb/MillimanIntegration_SubmitRequest_SF.subflow#Property.userAgent"/>
+    </attributeLinks>
+    <attributeLinks promotedAttribute="Property.userAgent" overriddenNodes="FCMComposite_1_7">
+      <overriddenAttribute href="com/metlife/esb/MillimanIntegration_RetrieveResponse.subflow#Property.userAgent"/>
+    </attributeLinks>
+    <attributeLinks promotedAttribute="Property.userId" overriddenNodes="FCMComposite_1_5">
+      <overriddenAttribute href="com/metlife/esb/MillimanIntegration_SubmitRequest_SF.subflow#Property.userId"/>
+    </attributeLinks>
+    <attributeLinks promotedAttribute="Property.userId" overriddenNodes="FCMComposite_1_7">
+      <overriddenAttribute href="com/metlife/esb/MillimanIntegration_RetrieveResponse.subflow#Property.userId"/>
+    </attributeLinks>
+    <stickyBoard/>
+  </eClassifiers>
+</ecore:EPackage>

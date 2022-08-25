@@ -1,0 +1,37 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "Customer details",
+  "Description": "Customer Information",
+  "type": "object",
+  "required": [ "name", "password" ],
+  "properties": {
+    "_id": {
+      "description": "CustomerID",
+      "type": "string"
+    },
+    "name": {
+      "description": "CustomerName",
+      "type": "string"
+    },
+    "password": {
+      "description": "CustomerPassword",
+      "type": "string"
+    },
+    "email": {
+      "description": "CustomerEmail",
+      "type": "string"
+    },
+    "country": {
+      "description": "CustomerEmail",
+      "type": "string"
+    },
+    "uid": {
+      "description": "CustomerUID",
+      "type": "string"
+    },
+    "__v": {
+      "description": "CustomerDescription",
+      "type": "integer"
+    }
+  }
+}

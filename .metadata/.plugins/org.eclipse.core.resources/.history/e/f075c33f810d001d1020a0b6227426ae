@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ComIbmCompute.msgnode="ComIbmCompute.msgnode" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:eflow="http://www.ibm.com/wbi/2005/eflow" xmlns:mbmonitor="http://www.ibm.com/wbi/2008/eflow_mbmonitor" xmlns:utility="http://www.ibm.com/wbi/2005/eflow_utility" nsURI="com/metlife/esb/MillimanIntegration_GenSOAPError_SF.subflow" nsPrefix="com_metlife_esb_MillimanIntegration_GenSOAPError_SF.subflow">
+  <eClassifiers xmi:type="eflow:FCMComposite" name="FCMComposite_1" useDefaults="true" udpSupport="true">
+    <eSuperTypes href="http://www.ibm.com/wbi/2005/eflow#//FCMBlock"/>
+    <translation xmi:type="utility:TranslatableString" key="MillimanIntegration_GenSOAPError_SF" bundleName="com/metlife/esb/MillimanIntegration_GenSOAPError_SF" pluginId="Milliman_RiskAssessment_APP"/>
+    <colorGraphic16 xmi:type="utility:GIFFileGraphic" resourceName="platform:/plugin/Milliman_RiskAssessment_APP/icons/full/obj16/MillimanIntegration_GenSOAPError_SF.gif"/>
+    <colorGraphic32 xmi:type="utility:GIFFileGraphic" resourceName="platform:/plugin/Milliman_RiskAssessment_APP/icons/full/obj30/MillimanIntegration_GenSOAPError_SF.gif"/>
+    <composition>
+      <nodes xmi:type="eflow:FCMSource" xmi:id="InTerminal.Input" location="94,115">
+        <translation xmi:type="utility:TranslatableString" key="InTerminal.Input" bundleName="com/metlife/esb/MillimanIntegration_GenSOAPError_SF" pluginId="Milliman_RiskAssessment_APP"/>
+      </nodes>
+      <nodes xmi:type="eflow:FCMSink" xmi:id="OutTerminal.Output" location="493,116">
+        <translation xmi:type="utility:TranslatableString" key="OutTerminal.Output" bundleName="com/metlife/esb/MillimanIntegration_GenSOAPError_SF" pluginId="Milliman_RiskAssessment_APP"/>
+      </nodes>
+      <nodes xmi:type="ComIbmCompute.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_1" location="226,115" computeExpression="esql://routine/com.metlife.esb#MillimanIntegration_GenSOAPError_SF_SOAPErrorReply.Main" computeMode="destinationAndMessage">
+        <translation xmi:type="utility:ConstantString" string="SOAPErrorReply"/>
+        <shortDescription xmi:type="utility:ConstantString" string="constructs error response sent to Majeco system"/>
+        <longDescription xmi:type="utility:ConstantString" string="constructs error response sent to Majeco system.&#xD;&#xA;For IIB Internal Error , 500 Response code is sent to Majesco. So Compute mode is set to LocalEnvironment and Message.&#xD;&#xA;"/>
+        <monitorEvents eventSourceDescription="In terminal" eventSourceName="SOAPErrorReply.terminal.in" eventIdentity="SOAPErrorReply.InTerminal">
+          <eventXMLDoc xmi:type="mbmonitor:MonitorEvent">
+            <globalTransactionCorrelator/>
+            <parentTransactionCorrelator/>
+            <localTransactionCorrelator/>
+            <bitStreamData encoding="none" bitstreamContent="none"/>
+            <eventName literal="SOAPErrorReply.InTerminal"/>
+            <eventFilter dataLocation="true()" isXPath="true"/>
+          </eventXMLDoc>
+        </monitorEvents>
+        <monitorEvents eventSourceDescription="Out terminal" eventSourceName="SOAPErrorReply.terminal.out" eventIdentity="SOAPErrorReply.OutTerminal">
+          <eventXMLDoc xmi:type="mbmonitor:MonitorEvent">
+            <globalTransactionCorrelator/>
+            <parentTransactionCorrelator/>
+            <localTransactionCorrelator/>
+            <bitStreamData encoding="base64Binary"/>
+            <eventName literal="SOAPErrorReply.OutTerminal"/>
+            <eventFilter dataLocation="true()" isXPath="true"/>
+          </eventXMLDoc>
+        </monitorEvents>
+      </nodes>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_1" targetNode="FCMComposite_1_1" sourceNode="InTerminal.Input" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_2" targetNode="OutTerminal.Output" sourceNode="FCMComposite_1_1" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.in"/>
+    </composition>
+    <propertyOrganizer/>
+    <stickyBoard/>
+  </eClassifiers>
+</ecore:EPackage>

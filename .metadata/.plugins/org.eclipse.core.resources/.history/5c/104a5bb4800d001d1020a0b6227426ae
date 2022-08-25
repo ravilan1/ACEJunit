@@ -1,0 +1,74 @@
+BROKER SCHEMA com.metlife.esb
+
+/********************************************************************************
+* Node Name:		<TransformSPItoIAS>                        					*
+* Module Name:		<MillimanIntegration_SubmitRequest_SF_TransformSPItoIAS>    *               
+* Description:		<Sends the response back to majesco, for token Authorization* 
+					error, request is re-tired once >       					*
+* Version			Date		    Author										*
+* 1.0				22-06-2018		Prabakaran									*           
+********************************************************************************/
+CREATE COMPUTE MODULE MillimanIntegration_SubmitRequest_SF_TransformSPItoIAS
+	
+/********************************************************************************
+* Description:		<Sends the response back to majesco, for token Authorization* 
+					error, request is re-tired once >       					*
+********************************************************************************/
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+	-- Variable declaration
+	DECLARE blbCData BLOB;
+	DECLARE tem NAMESPACE 'http://tempuri.org/'; 
+	DECLARE soapenv NAMESPACE 'http://schemas.xmlsoap.org/soap/envelope/';
+	DECLARE chrCData CHARACTER '';
+	CREATE FIELD Environment.Variables;
+	DECLARE refEnv REFERENCE TO Environment.Variables;
+	
+	/*	If the Auth Token is Expired, create a Retry flag and set to to true so that call goes back to previous step 
+		and calls PAS Authentication subflow again 	*/
+	IF( (InputRoot.HTTPResponseHeader."X-Original-HTTP-Status-Code" = '401') AND NOT EXISTS(refEnv.RetryFlag[] )) THEN
+		SET refEnv.RetryFlag = TRUE;
+		PROPAGATE TO TERMINAL 'out1';
+		RETURN FALSE;
+	--Throw user exception if authentication expired error response received for the second time
+	ELSEIF(InputRoot.HTTPResponseHeader."X-Original-HTTP-Status-Code" = '401') THEN
+		THROW USER EXCEPTION MESSAGE 401 VALUES('Error', 'Token Expired') ;
+	END IF;
+	
+	--if the HTTPResponseHeader field contains success code proceed else throw exception
+	IF (InputRoot.HTTPResponseHeader."X-Original-HTTP-Status-Code" = '200' ) THEN		
+		-- Context declaration to override default namespace
+		SET OutputRoot.SOAP.Context.Namespace.(SOAP.NamespaceDecl)xmlns:soapenv = soapenv;
+		SET OutputRoot.SOAP.Context.Namespace.(SOAP.NamespaceDecl)xmlns:tem = tem;
+		-- Create output response in environment tree and convert to cData to send in SOAP response
+		CREATE LASTCHILD OF Environment.Variables DOMAIN 'XMLNSC' NAME 'OutputResponse' ;
+		CREATE FIELD Environment.Variables.OutputResponse.IntelRX.IntelRXResponse;
+		DECLARE refEnvOut REFERENCE TO Environment.Variables.OutputResponse.IntelRX.IntelRXResponse;
+		DECLARE refIn REFERENCE TO InputRoot.JSON.Data;
+		-- Errors are sent in 200 response also
+		IF EXISTS(refIn.errors[]) THEN
+			SET refEnvOut.TrackingID = InputLocalEnvironment.Destination.SOAP.Reply.ReplyIdentifier;
+			SET refEnvOut.Result = '0';
+			SET refEnvOut.Comments = refIn.errors.Item[>].providerDescription;
+		ELSE			
+			SET refEnvOut.TrackingID = refIn.medicalHistoryOrderID;
+			SET refEnvOut.Result = CAST(refIn.resultCode AS INTEGER);
+			SET refEnvOut.Comments = refIn.commentText;
+		END IF;
+		-- Send the response in CDATA field
+		SET blbCData = ASBITSTREAM(refEnv.OutputResponse,InputRoot.Properties.Encoding,InputRoot.Properties.CodedCharSetId );
+		SET chrCData = CAST(blbCData AS CHAR CCSID InputRoot.Properties.CodedCharSetId);
+		DECLARE refOut REFERENCE TO OutputRoot.SOAP.Body;
+		CREATE LASTCHILD OF OutputRoot.SOAP.Body AS refOut NAMESPACE tem NAME 'SubmitRequestResponse';
+		SET refOut.(XMLNSC.CDataField)tem:SubmitRequestResult = chrCData;
+	ELSE
+		-- Indicator for RMT/BackendError error
+		SET Environment.Variables.isRMTError = TRUE;
+		THROW USER EXCEPTION MESSAGE InputRoot.HTTPResponseHeader."X-Original-HTTP-Status-Code" 
+		VALUES(COALESCE(InputRoot.JSON.Data.errors.Item[>].errorDescription, InputRoot.HTTPResponseHeader."X-Original-HTTP-Status-Line"));
+	END IF;
+
+	RETURN TRUE;
+END;
+
+END MODULE;

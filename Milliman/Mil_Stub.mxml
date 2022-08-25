@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?><MessageAssembly iib:parser="GENERICROOT" xmlns:iib="http://com.ibm.iib/lt/1.0">
+   <version xmlns:iib="http://com.ibm.iib/lt/1.0" iib:valueType="INTEGER">1</version>
+   <checkpoint>
+      <messageId xmlns:iib="http://com.ibm.iib/lt/1.0" iib:valueType="CHARACTER">0000A61C-62F25F1C-00000001</messageId>
+      <propagationCount xmlns:iib="http://com.ibm.iib/lt/1.0" iib:valueType="INTEGER">5</propagationCount>
+      <nodeCallDepth xmlns:iib="http://com.ibm.iib/lt/1.0" iib:valueType="INTEGER">6</nodeCallDepth>
+      <timestamp xmlns:iib="http://com.ibm.iib/lt/1.0" iib:valueType="TIMESTAMP">2022-08-09 13:20:28.225</timestamp>
+      <source>
+         <name xmlns:iib="http://com.ibm.iib/lt/1.0" iib:valueType="CHARACTER">SubmitRequest_Request_Response.Create_Customer</name>
+         <identifier xmlns:iib="http://com.ibm.iib/lt/1.0" iib:valueType="CHARACTER">gen.Milliman#FCMComposite_1_8.gen.SubmitRequest_Request_Response#FCMComposite_1_3</identifier>
+         <type xmlns:iib="http://com.ibm.iib/lt/1.0" iib:valueType="CHARACTER">ComIbmRESTRequestNode</type>
+         <terminal xmlns:iib="http://com.ibm.iib/lt/1.0" iib:valueType="CHARACTER">out</terminal>
+         <nodePath>
+            <application xmlns:iib="http://com.ibm.iib/lt/1.0" iib:valueType="CHARACTER">Milliman</application>
+            <messageFlow xmlns:iib="http://com.ibm.iib/lt/1.0" iib:valueType="CHARACTER">gen.Milliman</messageFlow>
+            <subflow>
+               <index xmlns:iib="http://com.ibm.iib/lt/1.0" iib:valueType="INTEGER">0</index>
+               <name xmlns:iib="http://com.ibm.iib/lt/1.0" iib:valueType="CHARACTER">SubmitRequest_Request_Response</name>
+            </subflow>
+            <node xmlns:iib="http://com.ibm.iib/lt/1.0" iib:valueType="CHARACTER">SubmitRequest_Request_Response.Create_Customer</node>
+         </nodePath>
+         <inputNode xmlns:iib="http://com.ibm.iib/lt/1.0" iib:valueType="BOOLEAN">FALSE</inputNode>
+      </source>
+      <target>
+         <name xmlns:iib="http://com.ibm.iib/lt/1.0" iib:valueType="CHARACTER">SubmitRequest_Request_Response.Compute1</name>
+         <identifier xmlns:iib="http://com.ibm.iib/lt/1.0" iib:valueType="CHARACTER">gen.Milliman#FCMComposite_1_8.gen.SubmitRequest_Request_Response#FCMComposite_1_4</identifier>
+         <type xmlns:iib="http://com.ibm.iib/lt/1.0" iib:valueType="CHARACTER">ComIbmComputeNode</type>
+         <terminal xmlns:iib="http://com.ibm.iib/lt/1.0" iib:valueType="CHARACTER">in</terminal>
+         <nodePath>
+            <application xmlns:iib="http://com.ibm.iib/lt/1.0" iib:valueType="CHARACTER">Milliman</application>
+            <messageFlow xmlns:iib="http://com.ibm.iib/lt/1.0" iib:valueType="CHARACTER">gen.Milliman</messageFlow>
+            <subflow>
+               <index xmlns:iib="http://com.ibm.iib/lt/1.0" iib:valueType="INTEGER">0</index>
+               <name xmlns:iib="http://com.ibm.iib/lt/1.0" iib:valueType="CHARACTER">SubmitRequest_Request_Response</name>
+            </subflow>
+            <node xmlns:iib="http://com.ibm.iib/lt/1.0" iib:valueType="CHARACTER">SubmitRequest_Request_Response.Compute1</node>
+         </nodePath>
+      </target>
+   </checkpoint>
+   <environment xmlns:iib="http://com.ibm.iib/lt/1.0" iib:parser="MQROOT">
+      <Service>
+         <Name iib:valueType="CHARACTER">Milliman</Name>
+         <Operation>
+            <Name iib:valueType="CHARACTER">SubmitRequest</Name>
+         </Operation>
+         <Transport>
+            <ReplyIdentifier iib:valueType="BLOB">534f415000000000000000004186c3821ca6000000000000</ReplyIdentifier>
+         </Transport>
+      </Service>
+   </environment>
+   <localEnvironment xmlns:iib="http://com.ibm.iib/lt/1.0" iib:parser="MQROOT">
+      <Destination>
+         <SOAP>
+            <Reply>
+               <ReplyIdentifier iib:valueType="BLOB">534f415000000000000000004186c3821ca6000000000000</ReplyIdentifier>
+            </Reply>
+         </SOAP>
+         <RouterList/>
+      </Destination>
+      <SOAP>
+         <Input>
+            <Message iib:parser="SOAP">
+               <Context iib:parser="xmlnsc">
+                  <operation iib:elementType="0x03000100" iib:valueType="CHARACTER">SubmitRequest</operation>
+                  <operationType iib:elementType="0x03000100" iib:valueType="CHARACTER">REQUEST_RESPONSE</operationType>
+                  <portType iib:elementType="0x03000100" iib:valueType="CHARACTER">IASRequestWSSoap</portType>
+                  <portTypeNamespace iib:elementType="0x03000100" iib:valueType="CHARACTER">http://tempuri.org/</portTypeNamespace>
+                  <port iib:elementType="0x03000100" iib:valueType="CHARACTER">IASRequestWSSoap12</port>
+                  <service iib:elementType="0x03000100" iib:valueType="CHARACTER">IASRequestWS</service>
+                  <fileName iib:elementType="0x03000100" iib:valueType="CHARACTER">Milliman.wsdl</fileName>
+                  <SOAP_Version iib:valueType="CHARACTER">1.2</SOAP_Version>
+                  <Namespace xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:tem="http://tempuri.org/"/>
+               </Context>
+               <Header iib:parser="xmlnsc"/>
+            </Message>
+            <Transport>
+               <HTTP>
+                  <MaxClientWaitTime iib:valueType="INTEGER">180</MaxClientWaitTime>
+               </HTTP>
+            </Transport>
+         </Input>
+      </SOAP>
+      <WrittenDestination>
+         <REST>
+            <Method iib:valueType="CHARACTER">POST</Method>
+            <URL iib:valueType="CHARACTER">http://localhost:7080/spi/v1/CreateCustomer</URL>
+            <RequestHeadersSize iib:valueType="INTEGER">136</RequestHeadersSize>
+            <RequestBodySize iib:valueType="INTEGER">223</RequestBodySize>
+            <StatusCode iib:valueType="INTEGER">200</StatusCode>
+            <ResponseHeadersSize iib:valueType="INTEGER">159</ResponseHeadersSize>
+            <ResponseBodySize iib:valueType="INTEGER">213</ResponseBodySize>
+            <TotalRequestTime iib:valueType="INTEGER">74</TotalRequestTime>
+         </REST>
+      </WrittenDestination>
+   </localEnvironment>
+   <exceptionList/>
+   <message xmlns:iib="http://com.ibm.iib/lt/1.0" iib:parser="WSRoot">
+      <Properties iib:parser="WSPROPERTYPARSER">
+         <MessageSet iib:elementType="0x03000000" iib:valueType="CHARACTER"/>
+         <MessageType iib:elementType="0x03000000" iib:valueType="CHARACTER"/>
+         <MessageFormat iib:elementType="0x03000000" iib:valueType="CHARACTER"/>
+         <Encoding iib:valueType="INTEGER">546</Encoding>
+         <CodedCharSetId iib:valueType="INTEGER">1208</CodedCharSetId>
+         <Transactional iib:valueType="BOOLEAN">FALSE</Transactional>
+         <Persistence iib:valueType="BOOLEAN">FALSE</Persistence>
+         <CreationTime iib:valueType="GMTTIMESTAMP">2022-08-09 13:20:28.247</CreationTime>
+         <ExpirationTime iib:valueType="INTEGER">-1</ExpirationTime>
+         <Priority iib:valueType="INTEGER">0</Priority>
+         <ReplyIdentifier iib:valueType="BLOB"/>
+         <ReplyProtocol iib:valueType="CHARACTER">SOAP-AXIS2</ReplyProtocol>
+         <Topic iib:elementType="0x03000000"/>
+         <ContentType iib:valueType="CHARACTER">application/json;charset=utf-8</ContentType>
+         <IdentitySourceType iib:elementType="0x03000000" iib:valueType="CHARACTER"/>
+         <IdentitySourceToken iib:elementType="0x03000000" iib:valueType="CHARACTER"/>
+         <IdentitySourcePassword iib:elementType="0x03000000" iib:valueType="CHARACTER"/>
+         <IdentitySourceIssuedBy iib:elementType="0x03000000" iib:valueType="CHARACTER"/>
+         <IdentityMappedType iib:elementType="0x03000000" iib:valueType="CHARACTER"/>
+         <IdentityMappedToken iib:elementType="0x03000000" iib:valueType="CHARACTER"/>
+         <IdentityMappedPassword iib:elementType="0x03000000" iib:valueType="CHARACTER"/>
+         <IdentityMappedIssuedBy iib:elementType="0x03000000" iib:valueType="CHARACTER"/>
+      </Properties>
+      <HTTPResponseHeader iib:parser="WSRSPHDR">
+         <X-Original-HTTP-Status-Line iib:valueType="CHARACTER">HTTP/1.1 200 OK</X-Original-HTTP-Status-Line>
+         <X-Original-HTTP-Status-Code iib:valueType="INTEGER">200</X-Original-HTTP-Status-Code>
+         <Content-Type iib:valueType="CHARACTER">application/json;charset=utf-8</Content-Type>
+         <Server iib:valueType="CHARACTER">IBM App Connect Enterprise</Server>
+         <Date iib:valueType="CHARACTER">Tue, 09 Aug 2022 13:20:28 GMT</Date>
+         <Content-Length iib:valueType="CHARACTER">213</Content-Length>
+      </HTTPResponseHeader>
+      <JSON iib:parser="json">
+         <Data>
+            <_id iib:valueType="CHARACTER">9999</_id>
+            <name iib:valueType="CHARACTER">Raviiii</name>
+            <password iib:valueType="CHARACTER">$2b$10$G8AI1yMauPkwpTfGA6HNou1YgcisbOCdtyLF17Oxdu5w.jqnTL1AK</password>
+            <email iib:valueType="CHARACTER">ravilankalapalli@gmail.com</email>
+            <country iib:valueType="CHARACTER">india</country>
+            <uid iib:valueType="CHARACTER">b09f8ab6-af2b-4a40-9ae0-bc389ec43c94</uid>
+            <__v iib:valueType="INTEGER">1</__v>
+         </Data>
+      </JSON>
+   </message>
+</MessageAssembly>

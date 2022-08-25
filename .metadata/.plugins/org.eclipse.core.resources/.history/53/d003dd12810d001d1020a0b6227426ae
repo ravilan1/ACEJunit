@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ComIbmCompute.msgnode="ComIbmCompute.msgnode" xmlns:ComIbmRESTRequest.msgnode="ComIbmRESTRequest.msgnode" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:eflow="http://www.ibm.com/wbi/2005/eflow" xmlns:mbmonitor="http://www.ibm.com/wbi/2008/eflow_mbmonitor" xmlns:utility="http://www.ibm.com/wbi/2005/eflow_utility" nsURI="com/metlife/esb/MillimanIntegration_RetrieveResponse.subflow" nsPrefix="com_metlife_esb_MillimanIntegration_RetrieveResponse.subflow">
+  <eClassifiers xmi:type="eflow:FCMComposite" name="FCMComposite_1" useDefaults="true" udpSupport="true">
+    <eSuperTypes href="http://www.ibm.com/wbi/2005/eflow#//FCMBlock"/>
+    <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="Property.configurableServiceName" name="configurableServiceName" lowerBound="1" defaultValueLiteral="GBR_ERLAuthentication_ConfigServiceA">
+      <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="Property.clientId" name="clientId" lowerBound="1" defaultValueLiteral="GBR_ERL_ClientIDA">
+      <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="Property.userId" name="userId" lowerBound="1" defaultValueLiteral="SMDA">
+      <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="Property.userAgent" name="userAgent" lowerBound="1" defaultValueLiteral="UAA">
+      <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <eStructuralFeatures xmi:type="ecore:EAttribute" xmi:id="Property.baseURL" name="baseURL" defaultValueLiteral="http://localhost:8080/riskAssessmentServices/api/v1">
+      <eType xmi:type="ecore:EDataType" href="http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eStructuralFeatures>
+    <translation xmi:type="utility:TranslatableString" key="MillimanIntegration_RetrieveResponse" bundleName="com/metlife/esb/MillimanIntegration_RetrieveResponse" pluginId="Milliman_RiskAssessment_APP"/>
+    <colorGraphic16 xmi:type="utility:GIFFileGraphic" resourceName="platform:/plugin/Milliman_RiskAssessment_APP/icons/full/obj16/MillimanIntegration_RetrieveResponse.gif"/>
+    <colorGraphic32 xmi:type="utility:GIFFileGraphic" resourceName="platform:/plugin/Milliman_RiskAssessment_APP/icons/full/obj30/MillimanIntegration_RetrieveResponse.gif"/>
+    <composition>
+      <nodes xmi:type="eflow:FCMSource" xmi:id="InTerminal.Input" location="92,110">
+        <translation xmi:type="utility:TranslatableString" key="InTerminal.Input" bundleName="com/metlife/esb/MillimanIntegration_RetrieveResponse" pluginId="Milliman_RiskAssessment_APP"/>
+      </nodes>
+      <nodes xmi:type="eflow:FCMSink" xmi:id="OutTerminal.Output" location="734,112">
+        <translation xmi:type="utility:TranslatableString" key="OutTerminal.Output" bundleName="com/metlife/esb/MillimanIntegration_RetrieveResponse" pluginId="Milliman_RiskAssessment_APP"/>
+        <shortDescription xmi:type="utility:ConstantString" string="Output Node to return output to the main flow"/>
+        <longDescription xmi:type="utility:ConstantString" string="Output Node to return output to the main flow"/>
+      </nodes>
+      <nodes xmi:type="ComIbmCompute.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_1" location="172,110" computeExpression="esql://routine/com.metlife.esb#MillimanIntegration_RetrieveResponse_TransformIAStoSPI.Main" computeMode="destinationAndMessage">
+        <translation xmi:type="utility:ConstantString" string="TransformIAStoSPI"/>
+        <shortDescription xmi:type="utility:ConstantString" string="Call Metlife API by passing GUID in id parameter"/>
+        <longDescription xmi:type="utility:ConstantString" string="GUID returned by RMT system during submit operation is paased as input. Call GBR_ERL_GetAuthenticationToken sublow to get Authorization Token and save in IIB Global Cache."/>
+        <monitorEvents eventSourceDescription="Out terminal" eventSourceName="TransformIAStoSPI.terminal.out" eventIdentity="TransformIAStoSPI.OutTerminal">
+          <eventXMLDoc xmi:type="mbmonitor:MonitorEvent">
+            <globalTransactionCorrelator/>
+            <parentTransactionCorrelator dataLocation="$LocalEnvironment/Destination/REST/Request/Parameters/id" eventCorrelation="dataLocation"/>
+            <localTransactionCorrelator/>
+            <bitStreamData encoding="base64Binary"/>
+            <eventName literal="TransformIAStoSPI.OutTerminal"/>
+            <eventFilter dataLocation="true()" isXPath="true"/>
+          </eventXMLDoc>
+        </monitorEvents>
+        <monitorEvents eventSourceDescription="Out1 terminal" eventSourceName="TransformIAStoSPI.terminal.out1" eventIdentity="TransformIAStoSPI.Out1Terminal">
+          <eventXMLDoc xmi:type="mbmonitor:MonitorEvent">
+            <globalTransactionCorrelator/>
+            <parentTransactionCorrelator/>
+            <localTransactionCorrelator/>
+            <bitStreamData encoding="none" bitstreamContent="none"/>
+            <eventName literal="TransformIAStoSPI.Out1Terminal"/>
+            <eventFilter dataLocation="true()" isXPath="true"/>
+          </eventXMLDoc>
+        </monitorEvents>
+        <monitorEvents eventSourceDescription="In terminal" eventSourceName="TransformIAStoSPI.terminal.in" eventIdentity="TransformIAStoSPI.InTerminal">
+          <eventXMLDoc xmi:type="mbmonitor:MonitorEvent">
+            <globalTransactionCorrelator/>
+            <parentTransactionCorrelator/>
+            <localTransactionCorrelator/>
+            <bitStreamData encoding="base64Binary"/>
+            <eventName literal="TransformIAStoSPI.InTerminal"/>
+            <eventFilter dataLocation="true()" isXPath="true"/>
+          </eventXMLDoc>
+        </monitorEvents>
+      </nodes>
+      <nodes xmi:type="ComIbmRESTRequest.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_2" location="309,111" definitionFile="RiskAssessment.yaml" definitionType="swagger_20" operationName="retrieveRiskAssessmentOrder" baseURL="http://localhost:8080/riskAssessmentServices/api/v1" contentType="application/json" acceptCompressedResponses="true">
+        <translation xmi:type="utility:ConstantString" string="retrieveRiskAssessmentOrder"/>
+        <shortDescription xmi:type="utility:ConstantString" string="REST Request node to make request to METLIFE API"/>
+        <longDescription xmi:type="utility:ConstantString" string="Authorization token is passed in Header. If response is success, customer risk score value is returned."/>
+        <parameters name="id" expression=""/>
+        <monitorEvents eventSourceDescription="Out terminal" eventSourceName="retrieveRiskAssessmentOrder.terminal.out" eventIdentity="retrieveRiskAssessmentOrder.OutTerminal">
+          <eventXMLDoc xmi:type="mbmonitor:MonitorEvent">
+            <globalTransactionCorrelator/>
+            <parentTransactionCorrelator/>
+            <localTransactionCorrelator/>
+            <bitStreamData encoding="base64Binary"/>
+            <eventName literal="retrieveRiskAssessmentOrder.OutTerminal"/>
+            <eventFilter dataLocation="true()" isXPath="true"/>
+          </eventXMLDoc>
+        </monitorEvents>
+        <monitorEvents eventSourceDescription="Error terminal" eventSourceName="retrieveRiskAssessmentOrder.terminal.error" eventIdentity="retrieveRiskAssessmentOrder.ErrorTerminal">
+          <eventXMLDoc xmi:type="mbmonitor:MonitorEvent">
+            <globalTransactionCorrelator/>
+            <parentTransactionCorrelator/>
+            <localTransactionCorrelator/>
+            <bitStreamData encoding="base64Binary"/>
+            <eventName literal="retrieveRiskAssessmentOrder.ErrorTerminal"/>
+            <eventFilter dataLocation="true()" isXPath="true"/>
+          </eventXMLDoc>
+        </monitorEvents>
+      </nodes>
+      <nodes xmi:type="ComIbmCompute.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_3" location="532,111" computeExpression="esql://routine/com.metlife.esb#MillimanIntegration_RetrieveResponse_TransformSPItoIAS.Main">
+        <translation xmi:type="utility:ConstantString" string="TransformSPItoIAS"/>
+        <shortDescription xmi:type="utility:ConstantString" string="Customer Risk Score is returned by RMT system"/>
+        <longDescription xmi:type="utility:ConstantString" string="Response from RMT is sent back to Majesco. HTTP error code 401 is returned for invalid token. If token is invalid , request will be re-tried one more time and still if error is returned exception will be thrown"/>
+        <monitorEvents eventSourceDescription="Out terminal" eventSourceName="TransformSPItoIAS.terminal.out" eventIdentity="TransformSPItoIAS.OutTerminal">
+          <eventXMLDoc xmi:type="mbmonitor:MonitorEvent">
+            <globalTransactionCorrelator/>
+            <parentTransactionCorrelator/>
+            <localTransactionCorrelator/>
+            <bitStreamData encoding="base64Binary"/>
+            <eventName literal="TransformSPItoIAS.OutTerminal"/>
+            <eventFilter dataLocation="true()" isXPath="true"/>
+          </eventXMLDoc>
+        </monitorEvents>
+        <monitorEvents eventSourceDescription="Out1 terminal" eventSourceName="TransformSPItoIAS.terminal.out1" eventIdentity="TransformSPItoIAS.Out1Terminal">
+          <eventXMLDoc xmi:type="mbmonitor:MonitorEvent">
+            <globalTransactionCorrelator/>
+            <parentTransactionCorrelator/>
+            <localTransactionCorrelator/>
+            <bitStreamData encoding="none" bitstreamContent="none"/>
+            <eventName literal="TransformSPItoIAS.Out1Terminal"/>
+            <eventFilter dataLocation="true()" isXPath="true"/>
+          </eventXMLDoc>
+        </monitorEvents>
+        <monitorEvents eventSourceDescription="In terminal" eventSourceName="TransformSPItoIAS.terminal.in" eventIdentity="TransformSPItoIAS.InTerminal">
+          <eventXMLDoc xmi:type="mbmonitor:MonitorEvent">
+            <globalTransactionCorrelator/>
+            <parentTransactionCorrelator/>
+            <localTransactionCorrelator/>
+            <bitStreamData encoding="base64Binary"/>
+            <eventName literal="TransformSPItoIAS.InTerminal"/>
+            <eventFilter dataLocation="true()" isXPath="true"/>
+          </eventXMLDoc>
+        </monitorEvents>
+      </nodes>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_1" targetNode="FCMComposite_1_1" sourceNode="InTerminal.Input" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_2" targetNode="FCMComposite_1_2" sourceNode="FCMComposite_1_1" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_3" targetNode="FCMComposite_1_3" sourceNode="FCMComposite_1_2" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_4" targetNode="FCMComposite_1_3" sourceNode="FCMComposite_1_2" sourceTerminalName="OutTerminal.error" targetTerminalName="InTerminal.in"/>
+      <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_5" targetNode="OutTerminal.Output" sourceNode="FCMComposite_1_3" sourceTerminalName="OutTerminal.out" targetTerminalName="InTerminal.in"/>
+    </composition>
+    <propertyOrganizer>
+      <propertyDescriptor groupName="Group.Basic" configurable="true" userDefined="true" describedAttribute="Property.configurableServiceName">
+        <propertyName xmi:type="utility:TranslatableString" key="Property.configurableServiceName" bundleName="com/metlife/esb/MillimanIntegration_RetrieveResponse" pluginId="Milliman_RiskAssessment_APP"/>
+        <propertyDescriptor groupName="Group.Basic" configurable="true" userDefined="true" describedAttribute="Property.clientId">
+          <propertyName xmi:type="utility:TranslatableString" key="Property.clientId" bundleName="com/metlife/esb/MillimanIntegration_RetrieveResponse" pluginId="Milliman_RiskAssessment_APP"/>
+          <propertyDescriptor groupName="Group.Basic" configurable="true" userDefined="true" describedAttribute="Property.userId">
+            <propertyName xmi:type="utility:TranslatableString" key="Property.userId" bundleName="com/metlife/esb/MillimanIntegration_RetrieveResponse" pluginId="Milliman_RiskAssessment_APP"/>
+            <propertyDescriptor groupName="Group.Basic" configurable="true" userDefined="true" describedAttribute="Property.userAgent">
+              <propertyName xmi:type="utility:TranslatableString" key="Property.userAgent" bundleName="com/metlife/esb/MillimanIntegration_RetrieveResponse" pluginId="Milliman_RiskAssessment_APP"/>
+              <propertyDescriptor groupName="Group.Basic" propertyEditor="com.ibm.etools.mft.ibmnodes.editors.URLPropertyEditor" configurable="true" describedAttribute="Property.baseURL">
+                <propertyName xmi:type="utility:TranslatableString" key="Property.baseURL" bundleName="ComIbmRESTRequest" pluginId="com.ibm.etools.mft.ibmnodes.definitions"/>
+              </propertyDescriptor>
+            </propertyDescriptor>
+          </propertyDescriptor>
+        </propertyDescriptor>
+      </propertyDescriptor>
+    </propertyOrganizer>
+    <attributeLinks promotedAttribute="Property.baseURL" overriddenNodes="FCMComposite_1_2">
+      <overriddenAttribute href="ComIbmRESTRequest.msgnode#Property.baseURL"/>
+    </attributeLinks>
+    <stickyBoard/>
+  </eClassifiers>
+</ecore:EPackage>

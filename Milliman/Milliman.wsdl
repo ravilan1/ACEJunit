@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?><wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" targetNamespace="http://tempuri.org/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:tns="http://tempuri.org/">
+  <wsdl:documentation>
+    <wsdl:appinfo source="WMQI_APPINFO">
+      <MRWSDLAppInfo imported="true">
+        <binding hasEncoding="false" imported="true" name="IASRequestWSSoap12" originalBindingStyle="document"/>
+        <binding hasEncoding="false" imported="false" name="IASRequestWSSoap" originalBindingStyle="document"/>
+      </MRWSDLAppInfo>
+    </wsdl:appinfo>
+  </wsdl:documentation>
+  
+  <wsdl:types>
+    
+          <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" targetNamespace="http://tempuri.org/" xmlns:ibmSchExtn="http://www.ibm.com/schema/extensions">
+<xsd:include schemaLocation="Milliman_InlineSchema1.xsd"/>
+</xsd:schema>
+    </wsdl:types>
+  <wsdl:message name="SubmitRequestSoapIn">
+    <wsdl:part element="tns:SubmitRequest" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="SubmitRequestSoapOut">
+    <wsdl:part element="tns:SubmitRequestResponse" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="RetrieveResponseSoapIn">
+    <wsdl:part element="tns:RetrieveResponse" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="RetrieveResponseSoapOut">
+    <wsdl:part element="tns:RetrieveResponseResponse" name="parameters"/>
+  </wsdl:message>
+  <wsdl:portType name="IASRequestWSSoap">
+    <wsdl:operation name="SubmitRequest">
+      <wsdl:input message="tns:SubmitRequestSoapIn"/>
+      <wsdl:output message="tns:SubmitRequestSoapOut"/>
+    </wsdl:operation>
+    <wsdl:operation name="RetrieveResponse">
+      <wsdl:input message="tns:RetrieveResponseSoapIn"/>
+      <wsdl:output message="tns:RetrieveResponseSoapOut"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="IASRequestWSSoap" type="tns:IASRequestWSSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="SubmitRequest">
+      <soap:operation soapAction="http://tempuri.org/SubmitRequest" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RetrieveResponse">
+      <soap:operation soapAction="http://tempuri.org/RetrieveResponse" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="IASRequestWSSoap12" type="tns:IASRequestWSSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="SubmitRequest">
+      <soap12:operation soapAction="http://tempuri.org/SubmitRequest" style="document"/>
+      <wsdl:input>
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RetrieveResponse">
+      <soap12:operation soapAction="http://tempuri.org/RetrieveResponse" style="document"/>
+      <wsdl:input>
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="IASRequestWS">
+    <wsdl:port binding="tns:IASRequestWSSoap" name="IASRequestWSSoap">
+      <soap:address location="https://test.secure.millimanintelliscript.com/iasrequestws.asmx"/>
+    </wsdl:port>
+    <wsdl:port binding="tns:IASRequestWSSoap12" name="IASRequestWSSoap12">
+      <soap12:address location="https://test.secure.millimanintelliscript.com/iasrequestws.asmx"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

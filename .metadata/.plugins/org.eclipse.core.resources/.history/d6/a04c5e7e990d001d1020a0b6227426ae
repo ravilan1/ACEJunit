@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?><MessageAssembly iib:parser="GENERICROOT" xmlns:iib="http://com.ibm.iib/lt/1.0">
+   <version xmlns:iib="http://com.ibm.iib/lt/1.0" iib:valueType="INTEGER">1</version>
+   <checkpoint>
+      <messageId xmlns:iib="http://com.ibm.iib/lt/1.0" iib:valueType="CHARACTER">00007C7C-62E1164F-00000001</messageId>
+      <propagationCount xmlns:iib="http://com.ibm.iib/lt/1.0" iib:valueType="INTEGER">6</propagationCount>
+      <nodeCallDepth xmlns:iib="http://com.ibm.iib/lt/1.0" iib:valueType="INTEGER">7</nodeCallDepth>
+      <timestamp xmlns:iib="http://com.ibm.iib/lt/1.0" iib:valueType="TIMESTAMP">2022-07-27 10:41:19.774</timestamp>
+      <source>
+         <name xmlns:iib="http://com.ibm.iib/lt/1.0" iib:valueType="CHARACTER">MillimanIntegration_SubmitRequest_SF.TransformSPItoIAS</name>
+         <identifier xmlns:iib="http://com.ibm.iib/lt/1.0" iib:valueType="CHARACTER">com.metlife.esb.Milliman_RiskAssessment_MF#FCMComposite_1_5.com.metlife.esb.MillimanIntegration_SubmitRequest_SF#FCMComposite_1_3</identifier>
+         <type xmlns:iib="http://com.ibm.iib/lt/1.0" iib:valueType="CHARACTER">ComIbmComputeNode</type>
+         <terminal xmlns:iib="http://com.ibm.iib/lt/1.0" iib:valueType="CHARACTER">out</terminal>
+         <nodePath>
+            <application xmlns:iib="http://com.ibm.iib/lt/1.0" iib:valueType="CHARACTER">Milliman_RiskAssessment_APP</application>
+            <messageFlow xmlns:iib="http://com.ibm.iib/lt/1.0" iib:valueType="CHARACTER">com.metlife.esb.Milliman_RiskAssessment_MF</messageFlow>
+            <subflow>
+               <index xmlns:iib="http://com.ibm.iib/lt/1.0" iib:valueType="INTEGER">0</index>
+               <name xmlns:iib="http://com.ibm.iib/lt/1.0" iib:valueType="CHARACTER">MillimanIntegration_SubmitRequest_SF</name>
+            </subflow>
+            <node xmlns:iib="http://com.ibm.iib/lt/1.0" iib:valueType="CHARACTER">MillimanIntegration_SubmitRequest_SF.TransformSPItoIAS</node>
+         </nodePath>
+         <inputNode xmlns:iib="http://com.ibm.iib/lt/1.0" iib:valueType="BOOLEAN">FALSE</inputNode>
+      </source>
+      <target>
+         <name xmlns:iib="http://com.ibm.iib/lt/1.0" iib:valueType="CHARACTER">MillimanIntegration_SubmitRequest_SF.com.metlife.esb.MillimanIntegration_SubmitRequest_SF#OutTerminal.Output</name>
+         <identifier xmlns:iib="http://com.ibm.iib/lt/1.0" iib:valueType="CHARACTER">com.metlife.esb.Milliman_RiskAssessment_MF#FCMComposite_1_5.com.metlife.esb.MillimanIntegration_SubmitRequest_SF#OutTerminal.Output</identifier>
+         <type xmlns:iib="http://com.ibm.iib/lt/1.0" iib:valueType="CHARACTER">OutputNode</type>
+         <terminal xmlns:iib="http://com.ibm.iib/lt/1.0" iib:valueType="CHARACTER">in</terminal>
+         <nodePath>
+            <application xmlns:iib="http://com.ibm.iib/lt/1.0" iib:valueType="CHARACTER">Milliman_RiskAssessment_APP</application>
+            <messageFlow xmlns:iib="http://com.ibm.iib/lt/1.0" iib:valueType="CHARACTER">com.metlife.esb.Milliman_RiskAssessment_MF</messageFlow>
+            <subflow>
+               <index xmlns:iib="http://com.ibm.iib/lt/1.0" iib:valueType="INTEGER">0</index>
+               <name xmlns:iib="http://com.ibm.iib/lt/1.0" iib:valueType="CHARACTER">MillimanIntegration_SubmitRequest_SF</name>
+            </subflow>
+            <node xmlns:iib="http://com.ibm.iib/lt/1.0" iib:valueType="CHARACTER">MillimanIntegration_SubmitRequest_SF.com.metlife.esb.MillimanIntegration_SubmitRequest_SF#OutTerminal.Output</node>
+         </nodePath>
+      </target>
+   </checkpoint>
+   <environment xmlns:iib="http://com.ibm.iib/lt/1.0" iib:parser="MQROOT">
+      <Monitoring>
+         <EventCorrelation>
+            <localTransactionId iib:valueType="CHARACTER">534f415000000000000000009f273f3f7c7c000000000000</localTransactionId>
+            <parentTransactionId iib:elementType="0x03000000" iib:valueType="CHARACTER"/>
+            <globalTransactionId iib:elementType="0x03000000" iib:valueType="CHARACTER"/>
+         </EventCorrelation>
+      </Monitoring>
+      <Variables>
+         <OutputResponse iib:parser="xmlnsc">
+            <Tracking iib:valueType="CHARACTER">2123-24234-211321-1234</Tracking>
+         </OutputResponse>
+      </Variables>
+   </environment>
+   <localEnvironment/>
+   <exceptionList/>
+   <message xmlns:iib="http://com.ibm.iib/lt/1.0" iib:parser="WSRoot">
+      <Properties iib:parser="MQPROPERTYPARSER">
+         <MessageSet iib:elementType="0x03000000"/>
+         <MessageType iib:elementType="0x03000000"/>
+         <MessageFormat iib:elementType="0x03000000"/>
+         <Encoding iib:elementType="0x03000000"/>
+         <CodedCharSetId iib:elementType="0x03000000"/>
+         <Transactional iib:elementType="0x03000000"/>
+         <Persistence iib:elementType="0x03000000"/>
+         <CreationTime iib:elementType="0x03000000"/>
+         <ExpirationTime iib:elementType="0x03000000"/>
+         <Priority iib:elementType="0x03000000"/>
+         <ReplyIdentifier iib:elementType="0x03000000"/>
+         <ReplyProtocol iib:valueType="CHARACTER">SOAP-AXIS2</ReplyProtocol>
+         <Topic iib:elementType="0x03000000"/>
+         <ContentType iib:elementType="0x03000000"/>
+         <IdentitySourceType iib:elementType="0x03000000"/>
+         <IdentitySourceToken iib:elementType="0x03000000"/>
+         <IdentitySourcePassword iib:elementType="0x03000000"/>
+         <IdentitySourceIssuedBy iib:elementType="0x03000000"/>
+         <IdentityMappedType iib:elementType="0x03000000"/>
+         <IdentityMappedToken iib:elementType="0x03000000"/>
+         <IdentityMappedPassword iib:elementType="0x03000000"/>
+         <IdentityMappedIssuedBy iib:elementType="0x03000000"/>
+      </Properties>
+      <SOAP iib:parser="SOAP">
+         <Context>
+            <Namespace xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:tem="http://tempuri.org/"/>
+         </Context>
+         <Body>
+            <NS5:SubmitRequestResponse xmlns:NS5="http://tempuri.org/" iib:prefix="false">
+               <NS5:SubmitRequestResult iib:elementType="0x03000001" iib:prefix="false">
+                  <Tracking iib:valueType="CHARACTER">2123-24234-211321-1234</Tracking>
+               </NS5:SubmitRequestResult>
+            </NS5:SubmitRequestResponse>
+         </Body>
+      </SOAP>
+   </message>
+</MessageAssembly>

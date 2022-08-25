@@ -1,0 +1,23 @@
+BROKER SCHEMA com.metlife.esb
+
+/********************************************************************************
+* Node Name:		<TransformSPItoIAS>                        					*
+* Module Name:		<MillimanIntegration_SubmitRequest_SF_TransformSPItoIAS>    *               
+* Description:		<Sends the response back to majesco, for token Authorization* 
+					error, request is re-tired once >       					*
+* Version			Date		    Author										*
+* 1.0				22-06-2018		Prabakaran									*           
+********************************************************************************/
+CREATE COMPUTE MODULE MillimanIntegration_SubmitRequest_SF_TransformSPItoIAS
+	
+/********************************************************************************
+* Description:		<Sends the response back to majesco, for token Authorization* 
+					error, request is re-tired once >       					*
+********************************************************************************/
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+	SET OutputRoot.JSON.Data = InputRoot.JSON.Data;
+	RETURN TRUE;
+END;
+
+END MODULE;

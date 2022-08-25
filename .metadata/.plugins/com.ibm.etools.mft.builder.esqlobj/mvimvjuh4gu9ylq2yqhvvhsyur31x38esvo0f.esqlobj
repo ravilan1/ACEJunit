@@ -1,0 +1,35 @@
+/*EATE FUNCTION Main() RETURNS BOOLE*/
+	BEGIN
+		SET OutputLocalEnvironment = InputLocalEnvironment;
+		CREATE FIELD OutputLocalEnvironment.Destination.REST.Request;
+		DECLARE refOutput REFERENCE TO OutputLocalEnvironment.Destination.REST.Request;
+		CREATE FIELD OutputRoot.JSON.Data;
+		SET OutputRoot.HTTPRequestHeader."Content-Type" 	= 'application/json';
+		SET OutputRoot.HTTPRequestHeader.Accept				= 'application/json';
+		DECLARE refOut REFERENCE TO OutputRoot.JSON.Data;
+		SET refOut._id = '9999';
+    	SET refOut.name = 'Ravi';
+    	SET refOut.password = '$2b$10$G8AI1yMauPkwpTfGA6HNou1YgcisbOCdtyLF17Oxdu5w.jqnTL1AK';
+    	SET refOut.email = 'ravilankalapalli@gmail.com';
+    	SET refOut.country = 'india';
+    	SET refOut.uid = 'b09f8ab6-af2b-4a40-9ae0-bc389ec43c94';
+    	SET refOut.__v = 1;
+    	--SET refOutput.Method = 'POST';
+    	--SET refOutput.Operation 								=	'Create_Customer';
+		--SET refOutput.BaseURL = 'http://localhost:7080/spi/v1/CreateCustomer';*/
+		RETURN TRUE;
+	END;
+
+	CREATE PROCEDURE CopyMessageHeaders() BEGIN
+		DECLARE I INTEGER 1;
+		DECLARE J INTEGER;
+		SET J = CARDINALITY(InputRoot.*[]);
+		WHILE I < J DO
+			SET OutputRoot.*[I] = InputRoot.*[I];
+			SET I = I + 1;
+		END WHILE;
+	END;
+
+	CREATE PROCEDURE CopyEntireMessage() BEGIN
+		SET OutputRoot = InputRoot;
+	END;

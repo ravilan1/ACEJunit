@@ -1,0 +1,214 @@
+/*EATE FUNCTION Main() RETURNS BOOLE*/
+	BEGIN
+		
+		--Declaring Variables
+		DECLARE chrKey CHARACTER 'GBR_ERL_authenticationtoken';
+		DECLARE chrValue CHARACTER '';
+		DECLARE chrCData CHARACTER '';
+		DECLARE blbCData BLOB ;
+		DECLARE intIndex INTEGER 1;
+		DECLARE intCntr INTEGER 1;
+		DECLARE blnExtnFlag BOOLEAN TRUE;
+		DECLARE tem NAMESPACE 'http://tempuri.org/'; 
+		
+		--if the flag is set to true, call the authentication subflow 
+		IF(Environment.Variables.RetryFlag = true)THEN
+			PROPAGATE TO TERMINAL 'out1' DELETE NONE;
+			CALL PopulateHTTPHeaders(OutputRoot);
+			SET OutputRoot.JSON.Data = Environment.Variables.RetryInput;
+			PROPAGATE TO TERMINAL 'out';
+			RETURN FALSE;
+		END IF;
+		
+		CALL PopulateHTTPHeaders(OutputRoot);
+		CREATE FIELD Environment.Variables;
+		-- Extract CDATA field from the request message and save in Environment Variable
+		SET chrCData = InputRoot.XMLNSC.tem:SubmitRequest.tem:requestXML;
+		SET blbCData = CAST(chrCData AS BLOB CCSID InputRoot.Properties.CodedCharSetId);
+		CREATE LASTCHILD OF Environment.Variables.InputRequest DOMAIN('XMLNSC') PARSE(blbCData);
+		
+		-- Set operation name to frame soap error response
+		SET Environment.Variables.operation = 'SubmitRequestResponse';
+		
+		DECLARE refIn REFERENCE TO Environment.Variables.InputRequest.XMLNSC.IntelRX.IntelRXRequest;
+		/* 	Only one Order and ane Appication/Order we will receive from Majesco, 
+			XSD is defined only for future use and no significance in present Implementation */
+			 
+		DECLARE refOdrIn REFERENCE TO refIn.Order[>];
+		
+		--creating output field
+		CREATE FIELD OutputRoot.JSON.Data;
+		DECLARE refOut REFERENCE TO OutputRoot.JSON.Data;
+		
+		SET refOut.associatedReferenceID 							=	refOdrIn.OrderReference;
+		SET refOut.prescriptionFillPriorityListCode					=	refOdrIn.GPIPriorityList;
+		SET refOut.inquiryTypeDataCode								=	refIn.RequestType;
+		
+		CREATE FIELD refOut.person IDENTITY (JSON.Object)person;
+		DECLARE refPrsnOut REFERENCE TO refOut.person;
+		DECLARE refApplIn REFERENCE TO refOdrIn.Application[>].Applicant;
+		SET refPrsnOut.genderCode									=	refApplIn.Gender;
+		SET refPrsnOut.birthDate									=	refApplIn.DOB;
+		SET refPrsnOut.relationshipCode								=	COALESCE(refApplIn.Relationship, NULL);
+		SET refPrsnOut.signatureMethodCode							=	COALESCE(refApplIn.SignatureType, NULL);
+		SET refPrsnOut.signatureMethodDescription					=	COALESCE(refApplIn.SignatureType, NULL);
+		
+		IF EXISTS(refApplIn.SSN[]) THEN
+			CREATE FIELD refPrsnOut.governmentIDs IDENTITY (JSON.Array)governmentIDs;
+			DECLARE refGIDOut REFERENCE TO refPrsnOut.governmentIDs;
+			CREATE LASTCHILD OF refGIDOut NAME 'Item';
+			SET refGIDOut.Item[>].governmentID VALUE					=	refApplIn.SSN;
+			SET refGIDOut.Item[>].governmentIDTypeCode					=	'1';
+			SET refGIDOut.Item[>].governmentIDTypeDescription			=	'US Social Security Number';
+		END IF;
+		CREATE FIELD refPrsnOut.name IDENTITY (JSON.Object)name;
+		DECLARE refNameOut REFERENCE TO refPrsnOut.name;
+		SET refNameOut.personGiven1Name								=	refApplIn.FirstName;
+		SET refNameOut.personLastName								=	refApplIn.LastName;
+		SET refNameOut.personGiven2Name								=	refApplIn.MiddleName;
+		
+		CREATE FIELD refPrsnOut.addresses IDENTITY (JSON.Array)addresses;
+		DECLARE refAddrOut REFERENCE TO refPrsnOut.addresses;
+		CREATE LASTCHILD OF refAddrOut NAME 'Item';
+		DECLARE refAddlIn REFERENCE TO refApplIn.AdditionalAttributes.Attribute;
+		-- AdditionalAttributes Tag has all the Address and datarequirement fields for Milliman. Refer Mapping document for reference
+		WHILE LASTMOVE(refAddlIn) DO
+			IF refAddlIn.Name = 'Address1' THEN
+				SET refAddrOut.Item[>].address1Line VALUE			=	refAddlIn.Value;
+			ELSEIF refAddlIn.Name = 'Address2' THEN
+				SET refAddrOut.Item[>].address2Line VALUE			=	refAddlIn.Value;
+			ELSEIF refAddlIn.Name = 'Address3' THEN
+				SET refAddrOut.Item[>].address3Line VALUE			=	refAddlIn.Value;
+			ELSEIF refAddlIn.Name = 'Address4' THEN
+				SET refAddrOut.Item[>].address4Line VALUE			=	refAddlIn.Value;
+			ELSEIF refAddlIn.Name = 'City' THEN
+				SET refAddrOut.Item[>].cityName						=	refAddlIn.Value;
+			ELSE
+				-- Create field only one time in the iteration
+				IF blnExtnFlag THEN
+					CREATE FIELD refPrsnOut.extension IDENTITY (JSON.Object)extension;
+					CREATE FIELD refPrsnOut.extension.additionalAttributes IDENTITY (JSON.Array)additionalAttributes;
+					SET blnExtnFlag = FALSE ;
+				END IF;
+				SET refPrsnOut.extension.additionalAttributes.Item[>intIndex].dataRequirementName VALUE		=	refAddlIn.Name;
+				SET refPrsnOut.extension.additionalAttributes.Item[>intIndex].dataRequirementValue VALUE	= 	refAddlIn.Value;
+				SET intIndex = intIndex + 1;				
+			END IF;
+			MOVE refAddlIn NEXTSIBLING NAME 'Attribute';
+		END WHILE;
+		-- Mapped as per the mapping spec shared by Majesco, No additional parameters is included.
+		CREATE FIELD refAddrOut.Item[>1].extension IDENTITY (JSON.Object)extension;
+		SET refAddrOut.Item[>1].extension.zipDeliveryOfficeCode							=	refApplIn.ZipCode;
+		SET refAddrOut.Item[>1].extension.stateCode										=	refApplIn.State;
+		IF EXISTS(refApplIn.ZipCode2[]) THEN
+			CREATE FIELD refAddrOut.Item[>2].extension IDENTITY (JSON.Object)extension;
+			SET refAddrOut.Item[>2].extension.zipDeliveryOfficeCode						=	refApplIn.ZipCode2;
+		END IF;
+		IF EXISTS(refApplIn.ZipCode3[]) THEN
+			CREATE FIELD refAddrOut.Item[>3].extension IDENTITY (JSON.Object)extension;
+			SET refAddrOut.Item[>3].extension.zipDeliveryOfficeCode						=	refApplIn.ZipCode3;
+		END IF;
+		IF EXISTS(refApplIn.ZipCode4[]) THEN
+			CREATE FIELD refAddrOut.Item[>4].extension IDENTITY (JSON.Object)extension;
+			SET refAddrOut.Item[>4].extension.zipDeliveryOfficeCode						=	refApplIn.ZipCode4;
+		END IF;
+		SET refPrsnOut.overrideRiskRuleFilterIndicator	=	COALESCE(refApplIn.OverrideRiskRuleFillFilter, NULL);
+		
+		IF EXISTS(refApplIn.Requirements[]) THEN
+			DECLARE refReqmntsIn REFERENCE TO refApplIn.Requirements.Requirement[>];
+			CREATE FIELD refPrsnOut.typeDataCodes IDENTITY (JSON.Array)typeDataCodes;
+			DECLARE refTypeOut REFERENCE TO refPrsnOut.typeDataCodes;
+			CREATE LASTCHILD OF refTypeOut NAME 'Item';
+			SET intIndex = 1;
+			-- List of requirements like MIB, MVR.
+			WHILE LASTMOVE(refReqmntsIn) DO
+				SET refTypeOut.Item[>intIndex].typeDataCode VALUE							=	refReqmntsIn;
+				MOVE refReqmntsIn NEXTSIBLING NAME 'Requirement';
+				SET intIndex = intIndex + 1;
+			END WHILE;
+		END IF;
+		IF EXISTS(refApplIn.Prescription.Fills.DrugFill[]) THEN
+			CREATE FIELD refOut.prescriptions IDENTITY (JSON.Array)prescriptions;
+			DECLARE refPresOut REFERENCE TO refOut.prescriptions;
+			CREATE LASTCHILD OF refPresOut NAME 'Item';
+			SET intIndex = 1;
+			DECLARE refDrugsIn REFERENCE TO refApplIn.Prescription.Fills.DrugFill[>];
+			WHILE LASTMOVE(refDrugsIn) DO
+				SET refPresOut.Item[>intIndex].drugCode 										=	refDrugsIn.NDC;
+				SET refPresOut.Item[>intIndex].fillDate 										=	refDrugsIn.FillDate;
+				SET refPresOut.Item[>intIndex].drugQuantityCount 								=	refDrugsIn.Quantity;
+				SET refPresOut.Item[>intIndex].drugSupplyPeriodinDays 							=	refDrugsIn.DaysSupply;
+				SET intCntr = 1;
+				IF EXISTS(refDrugsIn.ICD9Code[]) OR EXISTS(refDrugsIn.ICD10Code[])THEN
+					CREATE FIELD refPresOut.Item[>intIndex].procedureDiagnosis IDENTITY (JSON.Array)procedureDiagnosis;
+					DECLARE refProcOut REFERENCE TO refPresOut.Item[>intIndex].procedureDiagnosis;
+					CREATE LASTCHILD OF refProcOut NAME 'Item';
+					IF EXISTS(refDrugsIn.ICD9Code[]) THEN
+						SET refProcOut.Item[>intCntr].procedureDiagnosisCode 	VALUE			= 	refDrugsIn.ICD9Code;
+						SET refProcOut.Item[>intCntr].procedureDiagnosisTypeCode VALUE			=	'ICD9Code';
+						SET refProcOut.Item[>intCntr].procedureDiagnosisDescription VALUE		=	'ICD9Code';
+						SET intCntr = intCntr + 1;
+					END IF;
+					IF EXISTS(refDrugsIn.ICD10Code[]) THEN
+						SET refProcOut.Item[>intCntr].procedureDiagnosisCode 	VALUE			= 	refDrugsIn.ICD10Code;
+						SET refProcOut.Item[>intCntr].procedureDiagnosisTypeCode VALUE			=	'ICD10Code';
+						SET refProcOut.Item[>intCntr].procedureDiagnosisDescription VALUE		=	'ICD10Code';
+						SET intCntr = 1;
+					END IF;
+				END IF;
+				SET intCntr = 1;
+				IF EXISTS(refDrugsIn.PhysicianId[]) OR EXISTS(refDrugsIn.PharmacyId[])THEN
+					CREATE FIELD refPresOut.Item[>intIndex].party IDENTITY (JSON.Array)party;
+					DECLARE refProcOut REFERENCE TO refPresOut.Item[>intIndex].party;
+					CREATE LASTCHILD OF refProcOut NAME 'Item';
+					IF EXISTS(refDrugsIn.PhysicianId[]) THEN
+						SET refProcOut.Item[>intCntr].partyID 	VALUE							= 	refDrugsIn.PhysicianId;
+						SET refProcOut.Item[>intCntr].partyTypeCode VALUE						=	'Physician';
+						SET refProcOut.Item[>intCntr].partyTypeDescription VALUE				=	'Physician';
+						SET intCntr = intCntr + 1;
+					END IF;
+					IF EXISTS(refDrugsIn.PharmacyId[]) THEN
+						SET refProcOut.Item[>intCntr].partyID 	VALUE							= 	refDrugsIn.PharmacyId;
+						SET refProcOut.Item[>intCntr].partyTypeCode VALUE						=	'Pharmacy';
+						SET refProcOut.Item[>intCntr].partyTypeDescription VALUE				=	'Pharmacy';
+						SET intCntr = 1;
+					END IF;
+				END IF;
+			
+				MOVE refDrugsIn NEXTSIBLING NAME 'DrugFill';
+				SET intIndex = intIndex + 1;
+			END WHILE;
+			END IF;
+			CREATE LASTCHILD OF Environment.Variables DOMAIN('JSON') NAME 'RetryInput';
+			SET Environment.Variables.RetryInput = OutputRoot.JSON.Data;
+		RETURN TRUE;
+END;
+
+/********************************************************************************
+* Node Name:		<TransformIAStoSPI>                     					*
+* Module Name:		<PopulateHTTPHeaders>    									*               
+* Description:		<Populate HTTPHeaders>										*
+********************************************************************************/
+CREATE PROCEDURE PopulateHTTPHeaders ( IN OutputRoot REFERENCE)
+BEGIN
+	--Declaring Variables
+	DECLARE chrKey CHARACTER 'GBR_ERL_authenticationtoken';
+	DECLARE chrAuthTokenValue CHARACTER '';
+	--Getting the existing token from Global Cache
+	SET chrAuthTokenValue = Common_Lib.getValueFromGlobalCache(chrKey);
+	
+	--If the token value is empty or null ,call the PAS auth subflow to reset it
+	IF (TRIM(chrAuthTokenValue) IS NULL OR TRIM(chrAuthTokenValue)='') THEN
+		PROPAGATE TO TERMINAL 'out1' DELETE NONE;
+		--Getting the existing token from Global Cache
+		SET chrAuthTokenValue = Common_Lib.getValueFromGlobalCache(chrKey);
+	END IF;
+	
+	--creating Request
+	SET OutputRoot.HTTPRequestHeader.Authorization  	=	chrAuthTokenValue;
+	SET OutputRoot.HTTPRequestHeader."Content-Type" 	=	'application/json';  
+	SET OutputRoot.HTTPRequestHeader.Accept				=	'application/json';
+	SET OutputRoot.HTTPRequestHeader.UserId 			=	userId;
+	SET OutputRoot.HTTPRequestHeader."User-Agent"		=	userAgent;
+	SET OutputRoot.HTTPRequestHeader."X-IBM-Client-Id"	=	clientId;
+END;

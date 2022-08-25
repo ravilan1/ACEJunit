@@ -1,0 +1,33 @@
+
+CREATE COMPUTE MODULE Create_Customer_Compute1
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		-- CALL CopyMessageHeaders();
+		-- CALL CopyEntireMessage();
+		SET OutputLocalEnvironment = InputLocalEnvironment;
+		SET Environment.var.id 	   = InputLocalEnvironment.REST.Input.Parameters.id;
+		SET Environment.var.name 	   = InputLocalEnvironment.REST.Input.Parameters.name;
+		DECLARE refEnv REFERENCE TO Environment.var;
+		IF refEnv.name='Ravi' THEN
+			SET OutputLocalEnvironment.Destination.HTTP.RequestUrl = 'http://localhost:5000/customers';
+			SET OutputLocalEnvironment.Destination.HTTP.QueryString.uid=refEnv.id;-- This is for querystring pass
+			RETURN TRUE;
+		END IF;
+		
+		RETURN TRUE;
+	END;
+
+	CREATE PROCEDURE CopyMessageHeaders() BEGIN
+		DECLARE I INTEGER 1;
+		DECLARE J INTEGER;
+		SET J = CARDINALITY(InputRoot.*[]);
+		WHILE I < J DO
+			SET OutputRoot.*[I] = InputRoot.*[I];
+			SET I = I + 1;
+		END WHILE;
+	END;
+
+	CREATE PROCEDURE CopyEntireMessage() BEGIN
+		SET OutputRoot = InputRoot;
+	END;
+END MODULE;

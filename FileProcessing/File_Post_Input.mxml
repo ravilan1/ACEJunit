@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?><MessageAssembly iib:parser="GENERICROOT" xmlns:iib="http://com.ibm.iib/lt/1.0">
+   <version xmlns:iib="http://com.ibm.iib/lt/1.0" iib:valueType="INTEGER">1</version>
+   <checkpoint>
+      <messageId xmlns:iib="http://com.ibm.iib/lt/1.0" iib:valueType="CHARACTER">000056C0-62F26FA6-00000001</messageId>
+      <propagationCount xmlns:iib="http://com.ibm.iib/lt/1.0" iib:valueType="INTEGER">1</propagationCount>
+      <nodeCallDepth xmlns:iib="http://com.ibm.iib/lt/1.0" iib:valueType="INTEGER">2</nodeCallDepth>
+      <timestamp xmlns:iib="http://com.ibm.iib/lt/1.0" iib:valueType="TIMESTAMP">2022-08-09 14:31:02.973</timestamp>
+      <source>
+         <name xmlns:iib="http://com.ibm.iib/lt/1.0" iib:valueType="CHARACTER">Compute</name>
+         <identifier xmlns:iib="http://com.ibm.iib/lt/1.0" iib:valueType="CHARACTER">FileWithPostProcessing#FCMComposite_1_3</identifier>
+         <type xmlns:iib="http://com.ibm.iib/lt/1.0" iib:valueType="CHARACTER">ComIbmComputeNode</type>
+         <terminal xmlns:iib="http://com.ibm.iib/lt/1.0" iib:valueType="CHARACTER">out</terminal>
+         <nodePath>
+            <application xmlns:iib="http://com.ibm.iib/lt/1.0" iib:valueType="CHARACTER">FileProcessing</application>
+            <messageFlow xmlns:iib="http://com.ibm.iib/lt/1.0" iib:valueType="CHARACTER">FileWithPostProcessing</messageFlow>
+            <node xmlns:iib="http://com.ibm.iib/lt/1.0" iib:valueType="CHARACTER">Compute</node>
+         </nodePath>
+         <inputNode xmlns:iib="http://com.ibm.iib/lt/1.0" iib:valueType="BOOLEAN">FALSE</inputNode>
+      </source>
+      <target>
+         <name xmlns:iib="http://com.ibm.iib/lt/1.0" iib:valueType="CHARACTER">REST Request</name>
+         <identifier xmlns:iib="http://com.ibm.iib/lt/1.0" iib:valueType="CHARACTER">FileWithPostProcessing#FCMComposite_1_5</identifier>
+         <type xmlns:iib="http://com.ibm.iib/lt/1.0" iib:valueType="CHARACTER">ComIbmRESTRequestNode</type>
+         <terminal xmlns:iib="http://com.ibm.iib/lt/1.0" iib:valueType="CHARACTER">in</terminal>
+         <nodePath>
+            <application xmlns:iib="http://com.ibm.iib/lt/1.0" iib:valueType="CHARACTER">FileProcessing</application>
+            <messageFlow xmlns:iib="http://com.ibm.iib/lt/1.0" iib:valueType="CHARACTER">FileWithPostProcessing</messageFlow>
+            <node xmlns:iib="http://com.ibm.iib/lt/1.0" iib:valueType="CHARACTER">REST Request</node>
+         </nodePath>
+      </target>
+   </checkpoint>
+   <environment/>
+   <localEnvironment xmlns:iib="http://com.ibm.iib/lt/1.0" iib:parser="MQROOT">
+      <File>
+         <Directory iib:valueType="CHARACTER">C:\ACELearning\postin</Directory>
+         <Name iib:valueType="CHARACTER">Employee.json</Name>
+         <LastModified iib:valueType="GMTTIMESTAMP">2022-08-01 15:57:55.728</LastModified>
+         <TimeStamp iib:valueType="CHARACTER">20220809_143101_383880</TimeStamp>
+         <Offset iib:valueType="INTEGER">0</Offset>
+         <Record iib:valueType="INTEGER">1</Record>
+         <Delimiter iib:elementType="0x03000000"/>
+         <IsEmpty iib:valueType="BOOLEAN">FALSE</IsEmpty>
+      </File>
+      <Wildcard>
+         <WildcardMatch iib:valueType="CHARACTER">Employee</WildcardMatch>
+      </Wildcard>
+   </localEnvironment>
+   <exceptionList/>
+   <message xmlns:iib="http://com.ibm.iib/lt/1.0" iib:parser="GENERICROOT">
+      <Properties iib:parser="MQPROPERTYPARSER">
+         <MessageSet iib:elementType="0x03000000"/>
+         <MessageType iib:elementType="0x03000000"/>
+         <MessageFormat iib:elementType="0x03000000"/>
+         <Encoding iib:elementType="0x03000000"/>
+         <CodedCharSetId iib:elementType="0x03000000"/>
+         <Transactional iib:elementType="0x03000000"/>
+         <Persistence iib:elementType="0x03000000"/>
+         <CreationTime iib:elementType="0x03000000"/>
+         <ExpirationTime iib:elementType="0x03000000"/>
+         <Priority iib:elementType="0x03000000"/>
+         <ReplyIdentifier iib:elementType="0x03000000"/>
+         <ReplyProtocol iib:valueType="CHARACTER">FILE</ReplyProtocol>
+         <Topic iib:elementType="0x03000000"/>
+         <ContentType iib:elementType="0x03000000"/>
+         <IdentitySourceType iib:elementType="0x03000000"/>
+         <IdentitySourceToken iib:elementType="0x03000000"/>
+         <IdentitySourcePassword iib:elementType="0x03000000"/>
+         <IdentitySourceIssuedBy iib:elementType="0x03000000"/>
+         <IdentityMappedType iib:elementType="0x03000000"/>
+         <IdentityMappedToken iib:elementType="0x03000000"/>
+         <IdentityMappedPassword iib:elementType="0x03000000"/>
+         <IdentityMappedIssuedBy iib:elementType="0x03000000"/>
+      </Properties>
+      <JSON iib:parser="json">
+         <Data>
+            <_id iib:valueType="CHARACTER">9999</_id>
+            <name iib:valueType="CHARACTER">Ravi</name>
+            <password iib:valueType="CHARACTER">$2b$10$G8AI1yMauPkwpTfGA6HNou1YgcisbOCdtyLF17Oxdu5w.jqnTL1AK</password>
+            <email iib:valueType="CHARACTER">ravilankalapalli@gmail.com</email>
+            <country iib:valueType="CHARACTER">india</country>
+            <uid iib:valueType="CHARACTER">b09f8ab6-af2b-4a40-9ae0-bc389ec43c94</uid>
+            <__v iib:valueType="INTEGER">1</__v>
+            <state iib:valueType="CHARACTER">AP</state>
+         </Data>
+      </JSON>
+   </message>
+</MessageAssembly>

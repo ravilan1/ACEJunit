@@ -1,0 +1,65 @@
+BROKER SCHEMA com.metlife.esb
+
+/********************************************************************************
+* Node Name:		<SOAPErrorReply>                        					*
+* Module Name:		<MillimanIntegration_GenSOAPError_SF_SOAPErrorReply>    	*               
+* Description:		<constructs error response sent to Majeco system >       	*
+* Version			Date		    Author										*
+* 1.0				22-06-2018		Prabakaran									*           
+********************************************************************************/
+
+CREATE COMPUTE MODULE MillimanIntegration_GenSOAPError_SF_SOAPErrorReply
+/********************************************************************************
+* Description:		<constructs error response sent to Majeco system >       	*
+********************************************************************************/
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		
+		DECLARE tem NAMESPACE 'http://tempuri.org/'; 
+		DECLARE soapenv NAMESPACE 'http://schemas.xmlsoap.org/soap/envelope/';
+		DECLARE chrCData CHARACTER '';
+		DECLARE blbCData BLOB ;
+
+		SET OutputRoot.SOAP.Context.Namespace.(SOAP.NamespaceDecl)xmlns:soapenv = soapenv;
+		SET OutputRoot.SOAP.Context.Namespace.(SOAP.NamespaceDecl)xmlns:tem = tem;
+		CREATE LASTCHILD OF Environment.Variables DOMAIN 'XMLNSC' NAME 'OutputResponse' ;
+		CREATE FIELD Environment.Variables.OutputResponse.IntelRX.IntelRXResponse;
+		DECLARE refEnvOut REFERENCE TO Environment.Variables.OutputResponse.IntelRX.IntelRXResponse;
+		DECLARE refEnv REFERENCE TO Environment.Variables;
+		-- Used for end to end request tracking
+		SET refEnvOut.TrackingID 	= COALESCE(refEnv.InputRequest.XMLNSC.IntelRX.IntelRXRequest.TrackingID, 
+		InputLocalEnvironment.Destination.SOAP.Reply.ReplyIdentifier);
+		SET refEnvOut.Result 		= 0;
+		-- Error from backend
+		IF refEnv.isRMTError = TRUE THEN
+			SET refEnvOut.Comments 	= SUBSTRING(refEnv.LastException.Status.ProviderStatus.StatusDesc AFTER ';');
+		ELSE			
+			SET OutputLocalEnvironment.Destination.SOAP.Reply.Transport.HTTP.ReplyStatusCode = 500;
+			SET refEnvOut.Comments 	= 'IIB - Internal Error';
+		END IF;
+		
+		-- Send the response in CDATA field
+		SET blbCData = ASBITSTREAM(refEnv.OutputResponse,InputRoot.Properties.Encoding,InputRoot.Properties.CodedCharSetId );
+		SET chrCData = CAST(blbCData AS CHAR CCSID InputRoot.Properties.CodedCharSetId);
+		CREATE FIELD OutputRoot.SOAP.Body;
+		DECLARE refOut REFERENCE TO OutputRoot.SOAP.Body;
+		-- IF the field is not present , errror is occured in Input node itself
+		IF NOT EXISTS(refEnv.operation[]) THEN
+			IF InputLocalEnvironment.Destination.RouterList.DestinationData.labelName = 'SubmitRequest' THEN
+				SET refEnv.operation = 'SubmitRequestResponse';
+			ELSEIF InputLocalEnvironment.Destination.RouterList.DestinationData.labelName = 'RetrieveResponse' THEN
+				SET refEnv.operation = 'RetrieveResponseResponse';
+			END IF;
+		END IF;
+
+		IF refEnv.operation = 'SubmitRequestResponse' THEN
+			CREATE LASTCHILD OF OutputRoot.SOAP.Body AS refOut NAMESPACE tem NAME 'SubmitRequestResponse';
+			SET refOut.(XMLNSC.CDataField)tem:SubmitRequestResult = chrCData;
+		ELSEIF refEnv.operation = 'RetrieveResponseResponse' THEN
+			CREATE LASTCHILD OF OutputRoot.SOAP.Body AS refOut NAMESPACE tem NAME 'RetrieveResponseResponse';
+			SET refOut.(XMLNSC.CDataField)tem:RetrieveResponseResult = chrCData;
+		END IF;
+		
+		RETURN TRUE;
+	END;
+END MODULE;

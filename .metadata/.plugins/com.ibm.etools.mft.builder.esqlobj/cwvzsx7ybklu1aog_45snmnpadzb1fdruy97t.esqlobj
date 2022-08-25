@@ -1,0 +1,77 @@
+CREATE COMPUTE MODULE MillimanIntegration_RetrieveResponse_TransformIAStoSPI
+	
+/********************************************************************************
+* Description:		<This node retrieves the GBR authentition token from global *
+					cache and sets it in the HTTPRequestHeaders. It also sends	*
+					GUID to METLIFE request to retrieve customer 				*
+					Risk Score value>       									*
+********************************************************************************/
+	
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		
+		--Declaring Variables
+		DECLARE chrKey CHARACTER 'GBR_ERL_authenticationtoken';
+		DECLARE chrValue CHARACTER '';
+		DECLARE chrCData CHARACTER '';
+		DECLARE blbCData BLOB ;
+		DECLARE tem NAMESPACE 'http://tempuri.org/';
+		
+		--if the flag is set to true, call the authentication subflow 
+		IF(Environment.Variables.RetryFlag = true)THEN
+			PROPAGATE TO TERMINAL 'out1' DELETE NONE;
+			CALL PopulateHTTPHeaders(OutputRoot);
+			DECLARE refEnv REFERENCE TO Environment.Variables.InputRequest.XMLNSC.IntelRX.IntelRXRequestResponse;
+			--Set output parameter
+			SET OutputLocalEnvironment.Destination.REST.Request.Parameters.id = refEnv.TrackingID;
+			PROPAGATE TO TERMINAL 'out';
+			RETURN FALSE;
+		END IF;
+		
+		CALL PopulateHTTPHeaders(OutputRoot);
+		
+		CREATE FIELD Environment.Variables;
+		-- Extract CDATA field from the request message and save in Environment Variable
+		SET chrCData = InputRoot.XMLNSC.tem:RetrieveResponse.tem:requestXML;
+		SET blbCData = CAST(chrCData AS BLOB CCSID InputRoot.Properties.CodedCharSetId);
+		CREATE LASTCHILD OF Environment.Variables.InputRequest DOMAIN('XMLNSC') PARSE(blbCData);
+		
+		-- Set operation name to frame soap error response
+		SET Environment.Variables.operation = 'RetrieveResponseResponse';
+		
+		DECLARE refEnv REFERENCE TO Environment.Variables.InputRequest.XMLNSC.IntelRX.IntelRXRequestResponse;
+		--Set output path parameter
+		SET OutputLocalEnvironment.Destination.REST.Request.Parameters.id = refEnv.TrackingID;
+		RETURN TRUE;
+END;
+
+/********************************************************************************
+* Node Name:		<TransformIAStoSPI>                     					*
+* Module Name:		<PopulateHTTPHeaders>    									*               
+* Description:		<Populate HTTPHeaders>										*
+********************************************************************************/
+CREATE PROCEDURE PopulateHTTPHeaders ( IN OutputRoot REFERENCE)
+BEGIN
+	--Declaring Variables
+	DECLARE chrKey CHARACTER 'GBR_ERL_authenticationtoken';
+	DECLARE chrAuthTokenValue CHARACTER '';
+	--Getting the existing token from Global Cache
+	SET chrAuthTokenValue = Common_Lib.getValueFromGlobalCache(chrKey);
+	
+	--If the token value is empty or null ,call the PAS auth subflow to reset it
+	IF (TRIM(chrAuthTokenValue) IS NULL OR TRIM(chrAuthTokenValue)='') THEN
+		PROPAGATE TO TERMINAL 'out1' DELETE NONE;
+		--Getting the existing token from Global Cache
+		SET chrAuthTokenValue = Common_Lib.getValueFromGlobalCache(chrKey);
+	END IF;
+	
+	--creating Request
+	SET OutputRoot.HTTPRequestHeader.Authorization  	=	chrAuthTokenValue;
+	SET OutputRoot.HTTPRequestHeader."Content-Type" 	=	'application/json';  
+	SET OutputRoot.HTTPRequestHeader.Accept				=	'application/json';
+	SET OutputRoot.HTTPRequestHeader.UserId 			=	userId;
+	SET OutputRoot.HTTPRequestHeader."User-Agent"		=	userAgent;
+	SET OutputRoot.HTTPRequestHeader."X-IBM-Client-Id"	=	clientId;
+END;
+
+END MODULE;

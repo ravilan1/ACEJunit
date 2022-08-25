@@ -1,0 +1,9 @@
+Application=TaskEmail
+Flow=MQTestCase
+inputnode=MQ Input
+outputnode=Compute
+inputfile=/MQTestCase_Input.mxml
+outputfile=/MQTestCase_Output.mxml
+isNormalFlow=Y
+isStub=N
+isMultiPropagate=N

@@ -1,0 +1,25 @@
+CREATE COMPUTE MODULE MillimanIntegration_SubmitRequest_SF_TransformIAStoSPI
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		--SET OutputLocalEnvironment = InputLocalEnvironment;
+		CREATE FIELD OutputLocalEnvironment.Destination.REST.Request;
+		DECLARE refOutput REFERENCE TO OutputLocalEnvironment.Destination.REST.Request;
+		CREATE FIELD OutputRoot.JSON.Data;
+		SET refOutput.ContentType 	= 'application/json';
+		SET refOutput.Accept		= 'application/json';
+		DECLARE refOut REFERENCE TO OutputRoot.JSON.Data;
+		SET refOut._id = '9999';
+    	SET refOut.name = 'Ravi';
+    	SET refOut.password = '$2b$10$G8AI1yMauPkwpTfGA6HNou1YgcisbOCdtyLF17Oxdu5w.jqnTL1AK';
+    	SET refOut.email = 'ravilankalapalli@gmail.com';
+    	SET refOut.country = 'india';
+    	SET refOut.uid = 'b09f8ab6-af2b-4a40-9ae0-bc389ec43c94';
+    	SET refOut.__v = 1;
+    	SET refOut.state = 'AP';
+    	SET refOutput.Method = 'POST';
+    	SET refOutput.Operation =	'Create_Customer';
+		SET refOutput.BaseURL = 'http://localhost:7080/spi/v1/CreateCustomer';
+		SET OutputRoot.JSON.Data = InputRoot.JSON.Data;
+		RETURN TRUE;
+END;
+END MODULE;

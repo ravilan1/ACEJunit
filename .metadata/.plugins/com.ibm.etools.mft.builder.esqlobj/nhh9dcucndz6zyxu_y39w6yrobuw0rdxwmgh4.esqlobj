@@ -1,0 +1,39 @@
+CREATE COMPUTE MODULE getModifyCustomer_Compute
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		-- CALL CopyMessageHeaders();
+		 CALL CopyEntireMessage();
+		 SET refOutput.Parameters.id='1';
+		/*SET OutputLocalEnvironment = InputLocalEnvironment;
+		SET Environment.var.id 	   = 1;
+		SET Environment.var.name 	   = 'Ravi';
+		DECLARE refEnv REFERENCE TO Environment.var;
+		IF refEnv.name='Ravi' THEN
+			CREATE FIELD OutputLocalEnvironment.Destination.REST.Request;
+			DECLARE refOutput REFERENCE TO OutputLocalEnvironment.Destination.REST.Request;
+			SET refOutput.Method = 'Get';
+			SET refOutput.Parameters.id='1';
+			SET refOutput.Parameters.name='Ravi';
+			SET refOutput.BaseURL = 'http://localhost:7080/spi/v1/getCustomerId/1?name=Ravi';
+			--SET OutputLocalEnvironment.Destination.HTTP.RequestUrl = 'http://localhost:5000/customers/'||CAST(refEnv.id AS CHARACTER);
+			--SET OutputLocalEnvironment.Destination.HTTP.QueryString.name=refEnv.name;-- This is for querystring pass
+			--SET OutputLocalEnvironment.Destination.HTTP.QueryString.uid=refEnv.id;
+			RETURN TRUE;
+		END IF;*/
+		RETURN TRUE;
+	END;
+
+	CREATE PROCEDURE CopyMessageHeaders() BEGIN
+		DECLARE I INTEGER 1;
+		DECLARE J INTEGER;
+		SET J = CARDINALITY(InputRoot.*[]);
+		WHILE I < J DO
+			SET OutputRoot.*[I] = InputRoot.*[I];
+			SET I = I + 1;
+		END WHILE;
+	END;
+
+	CREATE PROCEDURE CopyEntireMessage() BEGIN
+		SET OutputRoot = InputRoot;
+	END;
+END MODULE;

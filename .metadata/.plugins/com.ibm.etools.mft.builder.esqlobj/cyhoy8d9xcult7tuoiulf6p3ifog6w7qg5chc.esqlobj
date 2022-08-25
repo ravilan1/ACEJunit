@@ -1,0 +1,14 @@
+/*EATE FUNCTION Main() RETURNS BOOLE*/
+	BEGIN
+	DECLARE tem NAMESPACE 'http://tempuri.org/'; 
+	DECLARE soapenv NAMESPACE 'http://schemas.xmlsoap.org/soap/envelope/';
+	IF (InputRoot.HTTPResponseHeader."X-Original-HTTP-Status-Code" = '200' ) THEN		
+		-- Context declaration to override default namespace
+		SET OutputRoot.SOAP.Context.Namespace.(SOAP.NamespaceDecl)xmlns:soapenv = soapenv;
+		SET OutputRoot.SOAP.Context.Namespace.(SOAP.NamespaceDecl)xmlns:tem = tem;
+		-- Create output response in environment tree and convert to cData to send in SOAP response
+		CREATE LASTCHILD OF Environment.Variables DOMAIN 'XMLNSC' NAME 'OutputResponse' ;
+	END IF;
+	RETURN TRUE;
+END;
+

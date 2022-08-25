@@ -1,0 +1,121 @@
+---
+swagger: "2.0"
+info:
+  version: "1.0"
+  description: "Customer API"
+  title: "Custmer details"
+  contact:
+    email: "ravilan1@in.ibm.com"
+host: "localhost:7080"
+basePath: "/spi/v1"
+schemes:
+- "http"
+- "https"
+paths:
+  /CreateCustomer:
+    post:
+      description: "Creating customer"
+      operationId: "Create_Customer"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "customer details"
+        required: true
+        schema:
+          $ref: "#/definitions/Customer"
+      responses:
+        "200":
+          description: "Customer recorded"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Customer"
+  /getCustomerId/{id}:
+    get:
+      description: "Get customer details based on customerid"
+      operationId: "getCustomerId"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - name: "id"
+        required: true
+        type: "string"
+        in: "path"
+      - name: "name"
+        in: "query"
+        type: "string"
+        required: true
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Customer"
+  /modifyCustomer:
+    get:
+      operationId: "getModifyCustomer"
+      responses:
+        "200":
+          description: "The operation was successful."
+          schema:
+            $ref: "#/definitions/Customer"
+      produces:
+      - "application/json"
+      description: "Retrieve modifyCustomer"
+      parameters:
+      - name: "id"
+        in: "query"
+        type: "string"
+        description: "customerId"
+  /AddState:
+    post:
+      description: "Creating customer"
+      operationId: "AddState"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "customer details"
+        required: true
+        schema:
+          $ref: "#/definitions/Customer"
+      responses:
+        "200":
+          description: "Customer recorded"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Customer"
+definitions:
+  Customer:
+    type: "object"
+    properties:
+      _id:
+        type: "string"
+      name:
+        type: "string"
+      password:
+        type: "string"
+      age:
+        type: "integer"
+        format: "int64"
+      email:
+        type: "string"
+      country:
+        type: "string"
+      uid:
+        type: "string"
+      __v:
+        type: "integer"
+        format: "int64"
+      state:
+        type: "string"

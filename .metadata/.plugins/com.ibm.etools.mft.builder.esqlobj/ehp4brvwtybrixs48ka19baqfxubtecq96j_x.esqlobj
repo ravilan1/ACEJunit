@@ -1,0 +1,19 @@
+CREATE COMPUTE MODULE MillimanIntegration_SubmitRequest_SF_TransformSPItoIAS
+	
+/********************************************************************************
+* Description:		<Sends the response back to majesco, for token Authorization* 
+					error, request is re-tired once >       					*
+********************************************************************************/
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+	IF (InputRoot.HTTPResponseHeader."X-Original-HTTP-Status-Code" = '200' ) THEN		
+		-- Context declaration to override default namespace
+		SET OutputRoot.SOAP.Context.Namespace.(SOAP.NamespaceDecl)xmlns:soapenv = soapenv;
+		SET OutputRoot.SOAP.Context.Namespace.(SOAP.NamespaceDecl)xmlns:tem = tem;
+		-- Create output response in environment tree and convert to cData to send in SOAP response
+		CREATE LASTCHILD OF Environment.Variables DOMAIN 'XMLNSC' NAME 'OutputResponse' ;
+	END IF;
+	RETURN TRUE;
+END;
+
+END MODULE;

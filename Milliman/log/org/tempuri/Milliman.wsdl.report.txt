@@ -1,0 +1,25 @@
+
+
+Importing file: C:\Users\ravilan99579\IBM\ACET12\CodeCoverageWS\Milliman_RiskAssessment_APP\Milliman.wsdl
+
+Copying source WSDL Milliman.wsdl to Milliman.wsdl.
+The WSDL import will proceed with bindings IASRequestWSSoap12.
+Creating wsdl schema document for file:///C:/Users/ravilan99579/IBM/ACET12/CodeCoverageWS/Milliman_RiskAssessment_APP/Milliman.wsdl.
+Parsing wsdl binding {http://tempuri.org/}IASRequestWSSoap12.
+Parsing wsdl binding input SubmitRequest.
+Parsing wsdl binding output SubmitRequest.
+Parsing wsdl binding input RetrieveResponse.
+Parsing wsdl binding output RetrieveResponse.
+Processing doc style for operation SubmitRequest.
+Processing doc style for operation RetrieveResponse.
+Populating WSDL schema Milliman.xsd.
+Creating file Milliman.xsd in the workspace.
+Creating file /Milliman/Milliman_InlineSchema1.xsd in the workspace.
+
+Elapsed time processing this message definition file: 0.39 seconds
+Number of warnings for this message definition file: 0
+
+
+Number of files processed: 1
+
+

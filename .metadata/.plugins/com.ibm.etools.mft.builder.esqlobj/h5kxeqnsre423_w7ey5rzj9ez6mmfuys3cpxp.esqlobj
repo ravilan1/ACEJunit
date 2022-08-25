@@ -1,0 +1,27 @@
+/*EATE FUNCTION Main() RETURNS BOOLE*/
+	BEGIN
+	DECLARE blbCData BLOB;
+	DECLARE chrCData CHARACTER '';
+	DECLARE tem NAMESPACE 'http://tempuri.org/'; 
+	DECLARE soapenv NAMESPACE 'http://schemas.xmlsoap.org/soap/envelope/';
+	CREATE FIELD Environment.Variables;
+	DECLARE refEnv REFERENCE TO Environment.Variables;
+	
+	IF (InputRoot.HTTPResponseHeader."X-Original-HTTP-Status-Code" = '200' ) THEN		
+		-- Context declaration to override default namespace
+		SET OutputRoot.SOAP.Context.Namespace.(SOAP.NamespaceDecl)xmlns:soapenv = soapenv;
+		SET OutputRoot.SOAP.Context.Namespace.(SOAP.NamespaceDecl)xmlns:tem = tem;
+		-- Create output response in environment tree and convert to cData to send in SOAP response
+		CREATE LASTCHILD OF refEnv DOMAIN 'XMLNSC' NAME 'OutputResponse' ;
+		DECLARE refEnvOut REFERENCE TO refEnv.OutputResponse;
+		DECLARE refIn REFERENCE TO InputRoot.JSON.Data;
+		SET refEnvOut.RetrieveResponseResult = 'success';
+		--SET blbCData = ASBITSTREAM(refEnv.OutputResponse,InputRoot.Properties.Encoding,InputRoot.Properties.CodedCharSetId );
+		--SET chrCData = CAST(blbCData AS CHAR CCSID InputRoot.Properties.CodedCharSetId);
+		DECLARE refOut REFERENCE TO OutputRoot.SOAP.Body;
+		CREATE LASTCHILD OF OutputRoot.SOAP.Body AS refOut NAMESPACE tem NAME 'SubmitRequestResponse';
+		SET refOut.(XMLNSC.CDataField)tem:SubmitRequestResult = refEnv.OutputResponse;
+	END IF;
+	RETURN TRUE;
+END;
+

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<policies>
+  <policy policyType="JDBCProviders" policyName="odbcpolicy" policyTemplate="DB2_91_Windows">
+    <databaseName>SMD</databaseName>
+    <databaseType>DB2 Universal Database</databaseType>
+    <databaseVersion>9.1</databaseVersion>
+    <type4DriverClassName>com.ibm.db2.jcc.DB2Driver</type4DriverClassName>
+    <type4DatasourceClassName>com.ibm.db2.jcc.DB2XADataSource</type4DatasourceClassName>
+    <connectionUrlFormat>jdbc:db2://[serverName]:[portNumber]/[databaseName];</connectionUrlFormat>
+    <connectionUrlFormatAttr1></connectionUrlFormatAttr1>
+    <connectionUrlFormatAttr2></connectionUrlFormatAttr2>
+    <connectionUrlFormatAttr3></connectionUrlFormatAttr3>
+    <connectionUrlFormatAttr4></connectionUrlFormatAttr4>
+    <connectionUrlFormatAttr5></connectionUrlFormatAttr5>
+    <serverName>default_Database_Server_Name</serverName>
+    <portNumber>50000</portNumber>
+    <jarsURL>C:\\Program Files\\IBM\\SQLLIB\\java</jarsURL>
+    <databaseSchemaNames>RAVILAN99579</databaseSchemaNames>
+    <description></description>
+    <maxConnectionPoolSize>0</maxConnectionPoolSize>
+    <securityIdentity>Emp</securityIdentity>
+    <environmentParms></environmentParms>
+    <jdbcProviderXASupport>true</jdbcProviderXASupport>
+    <useDeployedJars>false</useDeployedJars>
+  </policy>
+</policies>

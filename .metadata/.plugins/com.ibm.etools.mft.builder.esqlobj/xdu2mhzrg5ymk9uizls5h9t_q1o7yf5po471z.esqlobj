@@ -1,0 +1,7 @@
+/*EATE FUNCTION Main() RETURNS BOOLE*/
+	BEGIN
+	SET OutputRoot.JSON.Data = InputRoot.JSON.Data;
+
+	RETURN TRUE;
+END;
+
